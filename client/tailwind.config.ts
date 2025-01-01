@@ -12,6 +12,7 @@ export default {
       colors: {
         leftnav: "#212121",
         collapse_nav_tooltip: "#3f3d3d",
+        main_border_color: "#2d2d2d",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -80,5 +81,8 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwind-scrollbar")
+  ],
 } satisfies Config;

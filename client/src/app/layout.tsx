@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import LeftNav from "@/components/overview/left-nav";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,11 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html 
-      lang="en" 
-      className={`${roboto.className}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${roboto.className}`} suppressHydrationWarning>
       <head />
       <body>
         <ThemeProvider
@@ -34,7 +31,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main className="flex">
+            <LeftNav />
+            <div className="bg-white text-black flex-1">
+              {children}
+            </div>
+          </main>
         </ThemeProvider>
       </body>
     </html>
