@@ -12,7 +12,8 @@ export default {
       colors: {
         leftnav: "#212121",
         collapse_nav_tooltip: "#3f3d3d",
-        main_border_color: "#2d2d2d",
+        main_border_color: "#adb5bd",
+        main_app_black: "#495057",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

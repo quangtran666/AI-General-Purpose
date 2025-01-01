@@ -34,9 +34,16 @@ function PDFViewer() {
       onLoadSuccess={OnDocumentLoadSuccess}
       loading="Loading document..."
     >
-      {Array.from(new Array(numPages), (el, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-      ))}
+      <div className="flex flex-col items-center">
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page
+            key={`page_${index + 1}`}
+            pageNumber={index + 1}
+            className="mb-2"
+            scale={0.9}
+          />
+        ))}
+      </div>
     </Document>
   );
 }
