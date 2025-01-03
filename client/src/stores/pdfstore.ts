@@ -48,7 +48,7 @@ export const usePDFStore = create(
       },
       setPdfNumPages: (documentId, numPages) => {
         set((state) => {
-          state.pdfInfo[documentId] = { numPages, currentPage: 1 };
+          state.pdfInfo[documentId] = { numPages, currentPage: 0 };
         })
       },
       getPdfNumPages: (documentId) => {
@@ -63,7 +63,7 @@ export const usePDFStore = create(
         })
       },
       getCurrentPage: (documentId) => {
-        return get().pdfInfo[documentId]?.currentPage || 1;
+        return get().pdfInfo[documentId]?.currentPage || 0;
       }
     })),
     { name: "PdfsState", store: "PdfsState"}

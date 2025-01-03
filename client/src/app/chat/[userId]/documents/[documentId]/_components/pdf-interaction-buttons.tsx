@@ -49,8 +49,6 @@ function PDFInteracionButtons({ documentId, scrollToPage }: PDFInteracionButtons
       </div>
       <div className="flex justify-between items-center space-x-1">
         <Input
-          min={0}
-          max={getPdfNumPages(documentId)}
           value={getCurrentPage(documentId)}
           onChange={(e) => scrollToPage(Number(e.target.value))}
           className="outline-none border-0 focus:ring-slate-400 bg-slate-200 w-10 h-7"
