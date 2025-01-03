@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { usePDFStore } from "@/stores/pdfstore";
+import React, { memo } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+import { DocumentCallback } from "react-pdf/dist/esm/shared/types.js";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -21,31 +23,41 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function PDFViewer() {
-  const [numPages, setNumPages] = useState<number>(0);
+interface PDFViewerProps {
+  documentId: string;
+  setPageRef: (index: number, ref: (HTMLDivElement | null)) => void
+}
 
-  const OnDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
+const PDFViewer = memo(function PDFViewer({ documentId, setPageRef }: PDFViewerProps) {
+  const { getZoomLevel, setPdfNumPages, getPdfNumPages} = usePDFStore();
+
+  const OnDocumentLoadSuccess = async ({ numPages }: DocumentCallback) => {
+    setPdfNumPages(documentId, numPages);
   };
 
   return (
     <Document
-      file={"http://localhost:3000/demo.pdf"}
+      file={"http://localhost:3000/Multilayer-perceptron.pdf"}
       onLoadSuccess={OnDocumentLoadSuccess}
       loading="Loading document..."
     >
       <div className="flex flex-col items-center">
-        {Array.from(new Array(numPages), (el, index) => (
-          <Page
+        {Array.from(new Array(getPdfNumPages(documentId)), (el, index) => (
+          <div 
+            ref={el => setPageRef(index, el)} 
             key={`page_${index + 1}`}
-            pageNumber={index + 1}
-            className="mb-2"
-            scale={0.9}
-          />
+          >
+            <Page
+              pageNumber={index + 1}
+              className="mb-2"
+              scale={getZoomLevel(documentId)}
+              loading="Loading page..."
+            />
+          </div>
         ))}
       </div>
     </Document>
   );
-}
+});
 
 export default PDFViewer;
