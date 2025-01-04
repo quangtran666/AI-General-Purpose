@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { FolderOpen, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import NewFolderButton from "./new-folder-button";
 
 function UtilButtons() {
   return (
@@ -11,12 +12,7 @@ function UtilButtons() {
         </span>
         New Chat
       </Button>
-      <Button className="bg-leftnav text-white border-1 border-slate-500 p-5">
-        <span>
-          <FolderOpen />
-        </span>
-        New Folder
-      </Button>
+      <NewFolderButton />
     </>
   );
 }
