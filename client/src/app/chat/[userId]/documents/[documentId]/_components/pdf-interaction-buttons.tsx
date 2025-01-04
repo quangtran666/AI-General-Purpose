@@ -9,8 +9,17 @@ interface PDFInteracionButtonsProps {
   scrollToPage: (pageNumber: number) => void;
 }
 
-function PDFInteracionButtons({ documentId, scrollToPage }: PDFInteracionButtonsProps) {
-  const { getZoomLevel, setZoomLevel, resetZoomLevel, getCurrentPage, getPdfNumPages } = usePDFStore();
+function PDFInteracionButtons({
+  documentId,
+  scrollToPage,
+}: PDFInteracionButtonsProps) {
+  const {
+    getZoomLevel,
+    setZoomLevel,
+    resetZoomLevel,
+    getCurrentPage,
+    getPdfNumPages,
+  } = usePDFStore();
 
   const zoomLevel = getZoomLevel(documentId);
 

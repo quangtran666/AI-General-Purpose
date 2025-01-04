@@ -52,6 +52,8 @@ const PDFViewer = memo(function PDFViewer({ documentId, setPageRef }: PDFViewerP
               className="mb-2"
               scale={getZoomLevel(documentId)}
               loading="Loading page..."
+              renderTextLayer={true}
+              renderAnnotationLayer={true}
             />
           </div>
         ))}
