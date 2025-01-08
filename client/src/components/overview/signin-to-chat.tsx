@@ -1,6 +1,9 @@
+"use client"
+
 import React from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react"
 
 function SignInToChat() {
   return (
@@ -15,7 +18,12 @@ function SignInToChat() {
         <p className="text-center text-sm text-neutral-400 font-medium">
           Sign in for free to save your chat history
         </p>
-        <Button className="text-neutral-200">Sign In</Button>
+        <Button 
+            onClick={() => signIn() } 
+            className="text-neutral-200"
+        >
+            Sign In
+        </Button>
       </div>
     </div>
   );

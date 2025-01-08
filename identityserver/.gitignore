@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 # Enviroments
 appsettings.json
 appsettings.Development.json
+
+# Keys
+keys
