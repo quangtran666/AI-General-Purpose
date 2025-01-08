@@ -17,7 +17,8 @@ import {
 import {useSession} from "next-auth/react";
 
 function LeftNav() {
-    const { status } = useSession()
+    const { data, status } = useSession()
+    console.log(data)
     
     return (
         <div className="w-1/5 h-svh p-4 bg-leftnav text-white flex flex-col ">
