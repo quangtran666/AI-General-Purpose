@@ -46,23 +46,23 @@ const authOptions: AuthOptions = {
                             Authorization: `Bearer ${context.tokens.access_token}`
                         }
                     });
-                    
+
                     return res.data;
                 }
-            }
+            },
         })
     ],
     callbacks: {
         async session({ session, token }) {
-            console.log("-----------Session---------------------")
-            console.log(session, token)
+            // console.log("-----------Session---------------------")
+            // console.log(session, token)
             session.accessToken = token.accessToken;
             session.user.userId = token.id;
             return session
         },
         async jwt({ token, account, profile }) {
-            console.log("-----------JWT---------------------")
-            console.log(token, account, profile)
+            // console.log("-----------JWT---------------------")
+            // console.log(token, account, profile)
             if (account) {
                 token.accessToken = account.access_token;
                 token.id = profile?.sub;

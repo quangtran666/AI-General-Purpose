@@ -15,11 +15,11 @@ import {
     AccordionTrigger,
 } from "../ui/accordion";
 import {useSession} from "next-auth/react";
+import UserSettings from "@/components/overview/user-settings";
 
 function LeftNav() {
-    const { data, status } = useSession()
-    console.log(data)
-    
+    const {status} = useSession()
+
     return (
         <div className="w-1/5 h-svh p-4 bg-leftnav text-white flex flex-col ">
             <section>
@@ -36,49 +36,51 @@ function LeftNav() {
                     ?
                     <div className="flex flex-col justify-center h-full">
                         <SignInToChat/>
-                    </div> 
+                    </div>
                     :
                     <>
                         {/* Cái này để chia mấy cái trong cùng một folder */}
                         <Accordion type="single" collapsible>
-                          <AccordionItem className="border-b-0" value="item-1">
-                            <AccordionTrigger className="bg-zinc-700 p-2 rounded-lg hover:no-underline">
-                              Folder 1
-                            </AccordionTrigger>
-                            <AccordionContent className="mt-1 p-0">
-                              <div className="flex flex-col h-full">
-                                <Link
-                                  href={"/"}
-                                  className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg ml-4"
-                                >
-                                  <MessageCircleMore className="w-5" />
-                                  <p className="text-sm">Multilayer-perceptron.pdf</p>
-                                </Link>
-                              </div>
-                              <div className="flex flex-col h-full">
-                                <Link
-                                  href={"/"}
-                                  className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg ml-4"
-                                >
-                                  <MessageCircleMore className="w-5" />
-                                  <p className="text-sm">Multilayer-perceptron.pdf</p>
-                                </Link>
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
+                            <AccordionItem className="border-b-0" value="item-1">
+                                <AccordionTrigger className="bg-zinc-700 p-2 rounded-lg hover:no-underline">
+                                    Folder 1
+                                </AccordionTrigger>
+                                <AccordionContent className="mt-1 p-0">
+                                    <div className="flex flex-col h-full">
+                                        <Link
+                                            href={"/"}
+                                            className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg ml-4"
+                                        >
+                                            <MessageCircleMore className="w-5"/>
+                                            <p className="text-sm">Multilayer-perceptron.pdf</p>
+                                        </Link>
+                                    </div>
+                                    <div className="flex flex-col h-full">
+                                        <Link
+                                            href={"/"}
+                                            className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg ml-4"
+                                        >
+                                            <MessageCircleMore className="w-5"/>
+                                            <p className="text-sm">Multilayer-perceptron.pdf</p>
+                                        </Link>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
                         </Accordion>
                         {/* Cái này thì là một cái bài viết bình thường */}
                         <div className="flex flex-col h-full">
-                          <Link href={"/"} className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg">
-                            <MessageCircleMore className="w-5"/>
-                            <p className="text-sm">Multilayer-perceptron.pdf</p>
-                          </Link>
+                            <Link href={"/"}
+                                  className="flex gap-2 items-center p-2 hover:bg-zinc-700 transition rounded-lg">
+                                <MessageCircleMore className="w-5"/>
+                                <p className="text-sm">Multilayer-perceptron.pdf</p>
+                            </Link>
                         </div>
                     </>
                 }
             </section>
             <section>
                 <LanguagesSelection/>
+                <UserSettings />
             </section>
         </div>
     );
