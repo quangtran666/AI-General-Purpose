@@ -1,6 +1,9 @@
 using Duende.IdentityServer;
-using identityserver;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using identityserver.Data;
+using identityserver.Models;
+using identityserver.ProfileServices;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace identityserver;
@@ -11,7 +14,19 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
-        var isBuilder = builder.Services.AddIdentityServer(options =>
+        var chatPPFDBConnectionString = builder.Configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
+        var identityServerDBConnectionString = builder.Configuration.GetConnectionString("IdentityServerDBConnectionString");
+        var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
+        
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(chatPPFDBConnectionString));
+
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        builder.Services
+            .AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
@@ -21,27 +36,19 @@ internal static class HostingExtensions
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
-            .AddTestUsers(TestUsers.Users);
-
-        // in-memory, code config
-        isBuilder.AddInMemoryIdentityResources(Config.IdentityResources);
-        isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
-        isBuilder.AddInMemoryClients(Config.Clients);
-
-
-        // if you want to use server-side sessions: https://blog.duendesoftware.com/posts/20220406_session_management/
-        // then enable it
-        //isBuilder.AddServerSideSessions();
-        //
-        // and put some authorization on the admin/management pages
-        //builder.Services.AddAuthorization(options =>
-        //       options.AddPolicy("admin",
-        //           policy => policy.RequireClaim("sub", "1"))
-        //   );
-        //builder.Services.Configure<RazorPagesOptions>(options =>
-        //    options.Conventions.AuthorizeFolder("/ServerSideSessions", "admin"));
-
-
+            .AddConfigurationStore(options =>
+            {
+                options.ConfigureDbContext = b => b.UseNpgsql(identityServerDBConnectionString,
+                    sql => sql.MigrationsAssembly(migrationsAssembly));
+            })
+            .AddOperationalStore(options =>
+            {
+                options.ConfigureDbContext = b => b.UseNpgsql(identityServerDBConnectionString, 
+                    sql => sql.MigrationsAssembly(migrationsAssembly));
+            })
+            .AddAspNetIdentity<ApplicationUser>()
+            .AddProfileService<CustomProfileService>();
+        
         builder.Services.AddAuthentication()
             .AddGoogle(options =>
             {

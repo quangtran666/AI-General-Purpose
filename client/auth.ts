@@ -35,7 +35,7 @@ const authOptions: AuthOptions = {
             authorization: {
                 params: {
                     redirect_uri: process.env.DUENDE_REDIRECT_URL,
-                    scope: "openid profile"
+                    scope: "openid profile identity"
                 }
             },
             userinfo: {
@@ -46,7 +46,9 @@ const authOptions: AuthOptions = {
                             Authorization: `Bearer ${context.tokens.access_token}`
                         }
                     });
-
+                    
+                    console.log(res.data)
+                    
                     return res.data;
                 }
             },
@@ -58,16 +60,18 @@ const authOptions: AuthOptions = {
             // console.log(session, token)
             session.accessToken = token.accessToken;
             session.user.userId = token.id;
+            session.user.email = token.email;
             return session
         },
         async jwt({ token, account, profile }) {
             // console.log("-----------JWT---------------------")
-            // console.log(token, account, profile)
+            console.log(token, account, profile)
             if (account) {
                 token.accessToken = account.access_token;
                 token.id = profile?.sub;
                 token.given_name = profile?.given_name;
                 token.family_name = profile?.family_name;
+                token.email = profile?.email;
             }
             return token
         }
