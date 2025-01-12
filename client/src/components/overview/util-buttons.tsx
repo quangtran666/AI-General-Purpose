@@ -1,20 +1,14 @@
 import React from "react";
-import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
 import NewFolderButton from "./new-folder-button";
+import NewChat from "@/components/overview/new-chat";
 
 function UtilButtons() {
-  return (
-    <>
-      <Button className="bg-leftnav text-white border-1 border-slate-500 p-5">
-        <span>
-          <Plus />
-        </span>
-        New Chat
-      </Button>
-      <NewFolderButton />
-    </>
-  );
+    return (
+        <>
+            <NewChat />
+            <NewFolderButton/>
+        </>
+    );
 }
 
 export default UtilButtons;
