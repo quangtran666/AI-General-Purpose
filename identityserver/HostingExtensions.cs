@@ -1,10 +1,11 @@
 using Duende.IdentityServer;
 using identityserver.Data;
-using identityserver.Models;
 using identityserver.ProfileServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using shared.Data;
+using shared.Models;
 
 namespace identityserver;
 

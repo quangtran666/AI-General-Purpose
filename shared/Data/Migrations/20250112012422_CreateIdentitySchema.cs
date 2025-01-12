@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace identityserver.Data.Migrations
+namespace shared.Data.Migrations
 {
     /// <inheritdoc />
     public partial class CreateIdentitySchema : Migration

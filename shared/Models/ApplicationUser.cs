@@ -4,7 +4,7 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace identityserver.Models;
+namespace shared.Models;
 
 public class ApplicationUser : IdentityUser
 {

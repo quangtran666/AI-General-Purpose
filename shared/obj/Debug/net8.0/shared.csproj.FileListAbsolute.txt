@@ -1,0 +1,13 @@
+C:\Projects\AI-General-Purpose\shared\bin\Debug\net8.0\shared.deps.json
+C:\Projects\AI-General-Purpose\shared\bin\Debug\net8.0\shared.dll
+C:\Projects\AI-General-Purpose\shared\bin\Debug\net8.0\shared.pdb
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.csproj.AssemblyReference.cache
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.AssemblyInfoInputs.cache
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.AssemblyInfo.cs
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.csproj.CoreCompileInputs.cache
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.sourcelink.json
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.dll
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\refint\shared.dll
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\shared.pdb
+C:\Projects\AI-General-Purpose\shared\obj\Debug\net8.0\ref\shared.dll

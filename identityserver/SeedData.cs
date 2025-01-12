@@ -2,11 +2,11 @@
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using IdentityModel;
-using identityserver.Data;
-using identityserver.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using shared.Data;
+using shared.Models;
 
 namespace identityserver;
 
