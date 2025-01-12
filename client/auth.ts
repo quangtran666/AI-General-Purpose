@@ -32,6 +32,9 @@ const authOptions: AuthOptions = {
             clientId: process.env.DUENDE_CLIENT_ID!,
             clientSecret: process.env.DUENDE_CLIENT_SECRET!,
             issuer: process.env.DUENDE_ISSUER!,
+            httpOptions: {
+                timeout: 6000,
+            },
             authorization: {
                 params: {
                     redirect_uri: process.env.DUENDE_REDIRECT_URL,
