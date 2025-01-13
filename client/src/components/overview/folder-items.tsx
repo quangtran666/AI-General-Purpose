@@ -4,9 +4,36 @@ import Link from "next/link";
 import {MessageCircleMore} from "lucide-react";
 import React from "react";
 import useCustomDropZone from "@/components/utils/custom-drop-zone";
+import {useToast} from "@/hooks/use-toast";
+import {DropEvent, FileRejection} from "react-dropzone";
 
 function FolderItems() {
-    const {getRootProps, getInputProps} = useCustomDropZone({maxFiles: 3});
+    const {toast} = useToast();
+
+    const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[], event: DropEvent) => {
+        acceptedFiles.forEach((file: File) => {
+            const reader = new FileReader();
+
+            reader.onabort = () => console.log("file reading was aborted");
+            reader.onerror = () => console.log("file reading has failed");
+            reader.onload = () => {
+                const binaryStr = reader.result;
+                // console.log(binaryStr);
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        fileRejections.forEach((fileRejections: FileRejection) => {
+            toast({
+                variant: "destructive",
+                title: "Error occurred when uploading file",
+                description: fileRejections.errors.map(message => message.message).join(" ,").toString()
+            })
+        })
+    }
+    
+    const {getRootProps, getInputProps} = useCustomDropZone({maxFiles: 3, onDrop});
     
     return (
         <>

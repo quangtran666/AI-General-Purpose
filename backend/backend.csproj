@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.411.5" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
@@ -24,12 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\shared\shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Behaviours\" />
-    <Folder Include="Common\Exceptions\" />
-    <Folder Include="Infrastructure\Services\" />
   </ItemGroup>
 
 </Project>

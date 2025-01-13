@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Amazon;
+using Amazon.S3;
+using backend.Infrastructure.Options;
+using backend.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using shared.Data;
 
@@ -8,9 +13,20 @@ public static class HostingExtension
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder app)
     {
-        var chatPPFDBConnectionString = app.Configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
-        app.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(chatPPFDBConnectionString));
+        app.Services.Configure<S3Settings>(app.Configuration.GetSection(S3Settings.SectionName));
+        app.Services.AddSingleton<IAmazonS3>(sp =>
+        {
+            var s3Settings = sp.GetRequiredService<IOptions<S3Settings>>().Value;
+            var config = new AmazonS3Config
+            {
+                Profile = new Profile(s3Settings.Profile),
+                RegionEndpoint = RegionEndpoint.GetBySystemName(s3Settings.Region)
+            };
+            
+            return new AmazonS3Client(config);
+        });
+
+        app.Services.AddSingleton<S3Services>();
         
         app.Services.AddAuthentication()
             .AddJwtBearer(options =>
@@ -49,15 +65,13 @@ public static class HostingExtension
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "VSA Backend v1");
-                options.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerUI();
         }
 
+        app.UseCors();
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

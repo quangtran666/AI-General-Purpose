@@ -68,7 +68,7 @@ const authOptions: AuthOptions = {
         },
         async jwt({ token, account, profile }) {
             // console.log("-----------JWT---------------------")
-            console.log(token, account, profile)
+            // console.log(token, account, profile)
             if (account) {
                 token.accessToken = account.access_token;
                 token.id = profile?.sub;

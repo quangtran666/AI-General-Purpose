@@ -38,5 +38,10 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         builder.HasMany(x => x.Messages)
             .WithOne(x => x.Document)
             .HasForeignKey(x => x.DocumentId);
+
+        builder.HasOne(x => x.Folder)
+            .WithMany(x => x.Documents)
+            .HasForeignKey(x => x.FolderId)
+            .IsRequired(false);
     }
 }
