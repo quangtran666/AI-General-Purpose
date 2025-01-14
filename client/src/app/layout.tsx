@@ -7,6 +7,7 @@ import React from "react";
 import {getSession} from "../../auth";
 import NextAuthProviders from "@/providers/nextauth-provider";
 import {Toaster} from "@/components/ui/toaster";
+import {ReactQueryProvider} from "@/providers/reactquery-provider";
 
 const roboto = Roboto({
     weight: ["100", "300", "400", "500", "700", "900"],
@@ -26,7 +27,7 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     const session = await getSession();
-    
+
     return (
         <html lang="en" className={`${roboto.className}`} suppressHydrationWarning>
         <head/>
@@ -38,13 +39,15 @@ export default async function RootLayout({
             disableTransitionOnChange
         >
             <NextAuthProviders session={session}>
-                <main className="flex">
-                    <LeftNav/>
-                    <div className="bg-white text-black flex-1">
-                        {children}
-                    </div>
-                    <Toaster />
-                </main>
+                <ReactQueryProvider>
+                    <main className="flex">
+                        <LeftNav/>
+                        <div className="bg-white text-black flex-1">
+                            {children}
+                        </div>
+                        <Toaster/>
+                    </main>
+                </ReactQueryProvider>
             </NextAuthProviders>
         </ThemeProvider>
         </body>

@@ -60,7 +60,7 @@ public class CreateDocumentController : ApiControllerBase
                 Name = request.File.FileName,
                 StorageKey = storageKey,
                 FolderId = request.FolderId,
-                UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
             };
 
             applicationDbContext.Documents.Add(document);
