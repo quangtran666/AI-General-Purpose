@@ -4,10 +4,12 @@ import {useMutation} from "@tanstack/react-query";
 import {setAuth} from "@/lib/axios";
 import {documentService, UploadDocumentParams} from "@/services/document/document-service";
 import {DropEvent, FileRejection} from "react-dropzone";
+import {useRouter} from "next/navigation";
 
 export const useDocumentUpload = () => {
     const {data: session} = useSession();
     const {toast} = useToast();
+    const router = useRouter();
 
     const mutation = useMutation({
         mutationFn: async ({file, folderId}: UploadDocumentParams) => {
@@ -15,7 +17,7 @@ export const useDocumentUpload = () => {
             return documentService.uploadDocument({file, folderId});
         },
         onSuccess: (data) => {
-            console.log(data);
+            router.push(`/chat/documents/${data.data}`)
         },
         onError: (error) => {
             toast({
@@ -27,8 +29,8 @@ export const useDocumentUpload = () => {
     })
 
     const handleDrop = (acceptedFiles: File[], fileRejections: FileRejection[], event: DropEvent) => {
-        acceptedFiles.forEach((file) => {
-            mutation.mutate({file, folderId: null});
+        acceptedFiles.forEach( (file) => {
+           mutation.mutate({file, folderId: null});
         })
 
         fileRejections.forEach((fileRejection: FileRejection) => {
