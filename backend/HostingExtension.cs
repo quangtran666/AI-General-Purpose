@@ -11,23 +11,8 @@ namespace backend;
 
 public static class HostingExtension
 {
-    public static WebApplication ConfigureServices(this WebApplicationBuilder app)
+    public static WebApplication ConfigureServices(this WebApplicationBuilder app, ApplicationConfig applicationConfig)
     {
-        app.Services.Configure<S3Settings>(app.Configuration.GetSection(S3Settings.SectionName));
-        app.Services.AddSingleton<IAmazonS3>(sp =>
-        {
-            var s3Settings = sp.GetRequiredService<IOptions<S3Settings>>().Value;
-            var config = new AmazonS3Config
-            {
-                Profile = new Profile(s3Settings.Profile),
-                RegionEndpoint = RegionEndpoint.GetBySystemName(s3Settings.Region)
-            };
-            
-            return new AmazonS3Client(config);
-        });
-
-        app.Services.AddSingleton<S3Services>();
-        
         app.Services.AddAuthentication()
             .AddJwtBearer(options =>
             {
@@ -51,8 +36,8 @@ public static class HostingExtension
 
 // builder.Services.AddProblemDetails();
 
-        app.Services.AddApplication();
-        app.Services.AddInfrastructure(app.Configuration);
+        app.Services.AddApplication(applicationConfig);
+        app.Services.AddInfrastructure(applicationConfig);
 
 // builder.Services.AddHealthChecks();
         app.Services.AddHttpContextAccessor();

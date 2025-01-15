@@ -30,6 +30,10 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         builder.Property(x => x.StorageKey)
             .IsRequired()
             .HasColumnName("storage_key");
+        
+        builder.Property(x => x.VectorCollectionName)
+            .IsRequired()
+            .HasColumnName("vector_collection_name");
 
         builder.HasOne(x => x.ApplicationUser)
             .WithMany(x => x.Documents)

@@ -1,6 +1,13 @@
-﻿using backend.Common.Behaviours;
+﻿using Amazon;
+using Amazon.S3;
+using backend.Common.Behaviours;
+using backend.Infrastructure.Options;
+using backend.Infrastructure.Services;
+using backend.Infrastructure.Services.RAG;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.SemanticKernel;
 using shared.Data;
 using shared.Interceptors;
 
@@ -8,7 +15,7 @@ namespace backend;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, ApplicationConfig applicationConfig)
     {
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
@@ -19,18 +26,36 @@ public static class DependencyInjection
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
+        services.AddSingleton<IDataLoader, DataLoader>();
+        services.AddSingleton(applicationConfig);
+
         return services;
     }
 
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, ApplicationConfig applicationConfig)
     {
-        var chatPPFDBConnectionString = configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseNpgsql(chatPPFDBConnectionString);
+            options.UseNpgsql(applicationConfig.DbConfig.ConnectionString);
             options.AddInterceptors(new AuditableEntityInterceptor());
         });
 
+        services.AddSingleton<IAmazonS3>(sp =>
+        {
+            var s3Settings = sp.GetRequiredService<IOptions<S3Settings>>().Value;
+            var config = new AmazonS3Config
+            {
+                Profile = new Profile(s3Settings.Profile),
+                RegionEndpoint = RegionEndpoint.GetBySystemName(s3Settings.Region)
+            };
+
+            return new AmazonS3Client(config);
+        });
+        services.AddSingleton<S3Services>();
+
+
+        var kernel = services.AddKernel();
+        
         return services;
     }
 }

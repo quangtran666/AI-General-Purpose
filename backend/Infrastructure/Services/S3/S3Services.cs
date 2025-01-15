@@ -5,16 +5,16 @@ using Microsoft.Extensions.Options;
 
 namespace backend.Infrastructure.Services;
 
-public class S3Services(IAmazonS3 s3Client, IOptions<S3Settings> s3Settings)
+public class S3Services(IAmazonS3 s3Client, ApplicationConfig applicationConfig)
 {
     private readonly IAmazonS3 _s3Client = s3Client;
-    private readonly IOptions<S3Settings> _s3Settings = s3Settings;
+    private readonly ApplicationConfig _applicationConfig = applicationConfig;
     
     public async Task UploadFileAsync(Stream fileStream, string fileName, CancellationToken cancellationToken = default)
     {
         var putRequest = new PutObjectRequest
         {
-            BucketName = _s3Settings.Value.BucketName,
+            BucketName = _applicationConfig.S3Settings.BucketName,
             Key = fileName,
             ContentType = "application/pdf",
             InputStream = fileStream,
@@ -31,7 +31,7 @@ public class S3Services(IAmazonS3 s3Client, IOptions<S3Settings> s3Settings)
     {
         var request = new GetPreSignedUrlRequest
         {
-            BucketName = _s3Settings.Value.BucketName,
+            BucketName = _applicationConfig.S3Settings.BucketName,
             Key = storageKey,
             Verb = HttpVerb.GET,
             Expires = DateTime.UtcNow.AddMinutes(15)
