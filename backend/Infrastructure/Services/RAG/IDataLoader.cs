@@ -2,5 +2,5 @@
 
 internal interface IDataLoader
 {
-    Task LoadPdf(string collectionName, Stream pdfStream, int batchSize, int betweenBatchDelayInMs, CancellationToken cancellationToken);
+    Task LoadPdf(string collectionName, byte[] pdfBytes, int batchSize, int betweenBatchDelayInMs, CancellationToken cancellationToken);
 }

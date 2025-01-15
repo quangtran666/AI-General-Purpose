@@ -15,14 +15,14 @@ internal sealed class DataLoader(
 #pragma warning restore SKEXP0001
 ) : IDataLoader
 {
-    public async Task LoadPdf(string collectionName, Stream pdfStream, int batchSize, int betweenBatchDelayInMs,
+    public async Task LoadPdf(string collectionName, byte[] pdfBytes, int batchSize, int betweenBatchDelayInMs,
         CancellationToken cancellationToken)
     {
         var collection = vectorStore.GetCollection<Guid, TextSnippet>(collectionName);
 
         await collection.CreateCollectionIfNotExistsAsync(cancellationToken).ConfigureAwait(false);
 
-        var sections = LoadText(pdfStream, cancellationToken);
+        var sections = LoadText(pdfBytes, cancellationToken);
         var batches = sections.Chunk(batchSize);
         
         foreach (var batch in batches)
@@ -75,9 +75,9 @@ internal sealed class DataLoader(
         }
     }
 
-    private static IEnumerable<RawContent> LoadText(Stream pdfStream, CancellationToken cancellationToken)
+    private static IEnumerable<RawContent> LoadText(byte[] pdfBytes, CancellationToken cancellationToken)
     {
-        using var document = PdfDocument.Open(pdfStream);
+        using var document = PdfDocument.Open(pdfBytes);
 
         foreach (var page in document.GetPages())
         {

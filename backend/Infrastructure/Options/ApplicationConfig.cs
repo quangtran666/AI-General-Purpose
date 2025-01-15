@@ -7,6 +7,7 @@ public class ApplicationConfig
     private readonly QdrantConfig _qdrantConfig = new();
     private readonly S3Settings _s3Settings = new();
     private readonly DbConfig _dbConfig = new();
+    private readonly RagConfig _ragConfig = new();
 
     public ApplicationConfig(ConfigurationManager configurationManager)
     {
@@ -29,6 +30,10 @@ public class ApplicationConfig
         configurationManager
             .GetRequiredSection(DbConfig.ConfigSectionName)
             .Bind(_dbConfig);
+        
+        configurationManager
+            .GetRequiredSection(RagConfig.ConfigSectionName)
+            .Bind(_ragConfig);
     }
     
     public OpenAIConfig OpenAIConfig => _openAIConfig;
@@ -36,4 +41,5 @@ public class ApplicationConfig
     public QdrantConfig QdrantConfig => _qdrantConfig;
     public S3Settings S3Settings => _s3Settings;
     public DbConfig DbConfig => _dbConfig;
+    public RagConfig RagConfig => _ragConfig;
 }

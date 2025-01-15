@@ -42,20 +42,34 @@ public static class DependencyInjection
 
         services.AddSingleton<IAmazonS3>(sp =>
         {
-            var s3Settings = sp.GetRequiredService<IOptions<S3Settings>>().Value;
             var config = new AmazonS3Config
             {
-                Profile = new Profile(s3Settings.Profile),
-                RegionEndpoint = RegionEndpoint.GetBySystemName(s3Settings.Region)
+                Profile = new Profile(applicationConfig.S3Settings.Profile),
+                RegionEndpoint = RegionEndpoint.GetBySystemName(applicationConfig.S3Settings.Region)
             };
 
             return new AmazonS3Client(config);
         });
         services.AddSingleton<S3Services>();
 
-
         var kernel = services.AddKernel();
+        kernel.AddOpenAIChatCompletion(
+            applicationConfig.OpenAIConfig.ModelId,
+            applicationConfig.OpenAIConfig.ApiKey,
+            applicationConfig.OpenAIConfig.OrgId);
+#pragma warning disable SKEXP0010
+        kernel.AddOpenAITextEmbeddingGeneration(
+            applicationConfig.OpenAiEmbeddingsConfig.ModelId,
+            applicationConfig.OpenAiEmbeddingsConfig.ApiKey,
+            applicationConfig.OpenAiEmbeddingsConfig.OrgId);
+#pragma warning restore SKEXP0010
+        kernel.AddQdrantVectorStore(
+            applicationConfig.QdrantConfig.Host,
+            applicationConfig.QdrantConfig.Port,
+            applicationConfig.QdrantConfig.Https,
+            applicationConfig.QdrantConfig.ApiKey);
         
+            
         return services;
     }
 }

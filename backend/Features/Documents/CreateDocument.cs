@@ -1,11 +1,14 @@
 ﻿using System.Security.Claims;
 using backend.Common;
+using backend.Infrastructure.Options;
 using backend.Infrastructure.Services;
+using backend.Infrastructure.Services.RAG;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using shared.Data;
+using shared.Helpers;
 using shared.Models;
 
 namespace backend.Features.Documents;
@@ -46,26 +49,33 @@ public class CreateDocumentController : ApiControllerBase
     internal sealed class CreateDocumentCommandHandler(
         ApplicationDbContext applicationDbContext,
         IHttpContextAccessor httpContextAccessor,
-        S3Services s3Services) : IRequestHandler<CreateDocumentCommand, int>
+        S3Services s3Services,
+        IDataLoader dataLoader,
+        ApplicationConfig applicationConfig) : IRequestHandler<CreateDocumentCommand, int>
     {
         public async Task<int> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
-            await using var stream = request.File.OpenReadStream();
-
             var storageKey = $"pdfs/{Guid.NewGuid()}";
-            await s3Services.UploadFileAsync(stream, storageKey, cancellationToken);
-
+            var fileBtyes = await FileHelper.ReadStreamToByteArrayAysnc(request.File.OpenReadStream(), cancellationToken);
+            await s3Services.UploadFileAsync(new MemoryStream(fileBtyes), storageKey, cancellationToken);
+            
+            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                         ?? throw new InvalidOperationException("UserName Identifier not found");
+            var collectionName = $"pdfs-{userId}-{request.File.FileName}";
             var document = new Document
             {
                 Name = request.File.FileName,
                 StorageKey = storageKey,
                 FolderId = request.FolderId,
-                UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
+                UserId = userId,
+                VectorCollectionName = collectionName
             };
-
             applicationDbContext.Documents.Add(document);
             await applicationDbContext.SaveChangesAsync(cancellationToken);
 
+            await dataLoader.LoadPdf(collectionName, fileBtyes, applicationConfig.RagConfig.DataLoadingBatchSize, applicationConfig.RagConfig.DataLoadingBetweenBatchDelayInMs, cancellationToken);
+
+            
             return document.Id;
         }
     }
