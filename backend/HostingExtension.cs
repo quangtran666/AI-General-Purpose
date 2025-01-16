@@ -5,6 +5,7 @@ using backend.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using shared.Data;
 
 namespace backend;
@@ -13,6 +14,11 @@ public static class HostingExtension
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder app, ApplicationConfig applicationConfig)
     {
+        app.Host.UseSerilog((context, configuration) =>
+        {
+            configuration.ReadFrom.Configuration(context.Configuration);
+        });
+
         app.Services.AddAuthentication()
             .AddJwtBearer(options =>
             {
@@ -53,6 +59,7 @@ public static class HostingExtension
             app.UseSwaggerUI();
         }
 
+        app.UseSerilogRequestLogging();
         app.UseCors();
         app.UseHttpsRedirection();
 
@@ -60,7 +67,7 @@ public static class HostingExtension
         app.UseAuthorization();
 
         app.MapControllers();
-        
+
         return app;
     }
 }

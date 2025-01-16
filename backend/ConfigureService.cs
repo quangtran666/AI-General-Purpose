@@ -24,6 +24,7 @@ public static class DependencyInjection
             options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
 
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            options.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
 
         services.AddSingleton<IDataLoader, DataLoader>();

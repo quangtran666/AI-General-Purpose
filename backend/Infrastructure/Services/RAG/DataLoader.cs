@@ -11,8 +11,9 @@ namespace backend.Infrastructure.Services.RAG;
 internal sealed class DataLoader(
     IVectorStore vectorStore,
 #pragma warning disable SKEXP0001
-    ITextEmbeddingGenerationService textEmbeddingGenerationService
+    ITextEmbeddingGenerationService textEmbeddingGenerationService,
 #pragma warning restore SKEXP0001
+    ILogger<DataLoader> logger
 ) : IDataLoader
 {
     public async Task LoadPdf(string collectionName, byte[] pdfBytes, int batchSize, int betweenBatchDelayInMs,
@@ -24,7 +25,7 @@ internal sealed class DataLoader(
 
         var sections = LoadText(pdfBytes, cancellationToken);
         var batches = sections.Chunk(batchSize);
-        
+
         foreach (var batch in batches)
         {
             var recordTask = batch.Select(async content => new TextSnippet
@@ -32,14 +33,16 @@ internal sealed class DataLoader(
                 Key = Guid.NewGuid(),
                 Text = content.Text,
                 PageNumber = content.PageNumber.ToString(),
-                TextEmbedding = await GenerateEmbeddingsWithRetryAsync(textEmbeddingGenerationService, content.Text, cancellationToken).ConfigureAwait(false)
+                TextEmbedding =
+                    await GenerateEmbeddingsWithRetryAsync(textEmbeddingGenerationService, content.Text,
+                        cancellationToken).ConfigureAwait(false)
             });
-            
+
             var records = await Task.WhenAll(recordTask).ConfigureAwait(false);
             var upsertKeys = collection.UpsertBatchAsync(records, cancellationToken: cancellationToken);
             await foreach (var key in upsertKeys.ConfigureAwait(false))
             {
-                Console.WriteLine($"Upserted key: {key} into collection: {collectionName}");
+                logger.LogInformation("Upserted key: {@key} into collection: {@collectionName}", key, collectionName);
             }
 
             await Task.Delay(betweenBatchDelayInMs, cancellationToken).ConfigureAwait(false);
@@ -47,7 +50,9 @@ internal sealed class DataLoader(
     }
 
 #pragma warning disable SKEXP0001
-    private static async Task<ReadOnlyMemory<float>> GenerateEmbeddingsWithRetryAsync(ITextEmbeddingGenerationService textEmbeddingGenerationService, string contentText, CancellationToken cancellationToken)
+    private async Task<ReadOnlyMemory<float>> GenerateEmbeddingsWithRetryAsync(
+        ITextEmbeddingGenerationService textEmbeddingGenerationService, string contentText,
+        CancellationToken cancellationToken)
 #pragma warning restore SKEXP0001
     {
         var tries = 0;
@@ -56,7 +61,8 @@ internal sealed class DataLoader(
         {
             try
             {
-                return await textEmbeddingGenerationService.GenerateEmbeddingAsync(contentText, cancellationToken: cancellationToken).ConfigureAwait(false);
+                return await textEmbeddingGenerationService
+                    .GenerateEmbeddingAsync(contentText, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (HttpOperationException ex) when (ex.StatusCode == HttpStatusCode.TooManyRequests)
             {
@@ -64,7 +70,7 @@ internal sealed class DataLoader(
 
                 if (tries < 3)
                 {
-                    Console.WriteLine($"Failed to generate embeddings for text: {contentText}. Retrying in 5 seconds.");
+                    logger.LogError("Failed to generate embeddings for text: {@contentText}}. Retrying in 5 seconds.", contentText);
                     await Task.Delay(5000, cancellationToken).ConfigureAwait(false);
                 }
                 else
