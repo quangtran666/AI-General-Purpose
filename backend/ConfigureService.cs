@@ -8,8 +8,11 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.Qdrant;
+using Microsoft.SemanticKernel.Data;
 using shared.Data;
 using shared.Interceptors;
+using shared.VectorModels;
 
 namespace backend;
 
@@ -69,7 +72,16 @@ public static class DependencyInjection
             applicationConfig.QdrantConfig.Port,
             applicationConfig.QdrantConfig.Https,
             applicationConfig.QdrantConfig.ApiKey);
-        
+        kernel.AddVectorStoreTextSearch<TextSnippet>(
+            new TextSearchStringMapper(result => (result as TextSnippet).Text),
+            new TextSearchResultMapper(result =>
+            {
+                var castResult = result as TextSnippet;
+#pragma warning disable SKEXP0001
+                return new TextSearchResult(value: castResult.Text)
+#pragma warning restore SKEXP0001
+                    { Name = castResult.Text, Link = castResult.PageNumber };
+            }));
             
         return services;
     }

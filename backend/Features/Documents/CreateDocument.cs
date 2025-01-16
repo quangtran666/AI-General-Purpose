@@ -22,61 +22,62 @@ public class CreateDocumentController : ApiControllerBase
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
+}
 
-    public record CreateDocumentCommand(IFormFile File, int? FolderId) : IRequest<int>;
+public record CreateDocumentCommand(IFormFile File, int? FolderId) : IRequest<int>;
 
-    internal sealed class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCommand>
+internal sealed class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCommand>
+{
+    public CreateDocumentCommandValidator()
     {
-        public CreateDocumentCommandValidator()
-        {
-            RuleFor(x => x.File)
-                .NotNull()
-                .WithMessage("File is required");
+        RuleFor(x => x.File)
+            .NotNull()
+            .WithMessage("File is required");
 
-            RuleFor(x => x.File)
-                .Custom((file, context) =>
-                {
-                    if (file == null) return;
-
-                    if (!Path.GetExtension(file.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
-                    {
-                        context.AddFailure("File", "File must be a PDF");
-                    }
-                });
-        }
-    }
-
-    internal sealed class CreateDocumentCommandHandler(
-        ApplicationDbContext applicationDbContext,
-        IHttpContextAccessor httpContextAccessor,
-        S3Services s3Services,
-        IDataLoader dataLoader,
-        ApplicationConfig applicationConfig) : IRequestHandler<CreateDocumentCommand, int>
-    {
-        public async Task<int> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
-        {
-            var storageKey = $"pdfs/{Guid.NewGuid()}";
-            var fileBtyes = await FileHelper.ReadStreamToByteArrayAysnc(request.File.OpenReadStream(), cancellationToken);
-            await s3Services.UploadFileAsync(new MemoryStream(fileBtyes), storageKey, cancellationToken);
-            
-            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) 
-                         ?? throw new InvalidOperationException("UserName Identifier not found");
-            var collectionName = $"pdfs-{userId}-{request.File.FileName}";
-            var document = new Document
+        RuleFor(x => x.File)
+            .Custom((file, context) =>
             {
-                Name = request.File.FileName,
-                StorageKey = storageKey,
-                FolderId = request.FolderId,
-                UserId = userId,
-                VectorCollectionName = collectionName
-            };
-            applicationDbContext.Documents.Add(document);
-            await applicationDbContext.SaveChangesAsync(cancellationToken);
+                if (file == null) return;
 
-            await dataLoader.LoadPdf(collectionName, fileBtyes, applicationConfig.RagConfig.DataLoadingBatchSize, applicationConfig.RagConfig.DataLoadingBetweenBatchDelayInMs, cancellationToken);
+                if (!Path.GetExtension(file.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.AddFailure("File", "File must be a PDF");
+                }
+            });
+    }
+}
 
-            
-            return document.Id;
-        }
+internal sealed class CreateDocumentCommandHandler(
+    ApplicationDbContext applicationDbContext,
+    IHttpContextAccessor httpContextAccessor,
+    S3Services s3Services,
+    IDataLoader dataLoader,
+    ApplicationConfig applicationConfig) : IRequestHandler<CreateDocumentCommand, int>
+{
+    public async Task<int> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+    {
+        var storageKey = $"pdfs/{Guid.NewGuid()}";
+        var fileBtyes = await FileHelper.ReadStreamToByteArrayAysnc(request.File.OpenReadStream(), cancellationToken);
+        await s3Services.UploadFileAsync(new MemoryStream(fileBtyes), storageKey, cancellationToken);
+
+        var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
+                     ?? throw new InvalidOperationException("UserName Identifier not found");
+        var collectionName = $"pdfs-{userId}-{request.File.FileName}";
+        var document = new Document
+        {
+            Name = request.File.FileName,
+            StorageKey = storageKey,
+            FolderId = request.FolderId,
+            UserId = userId,
+            VectorCollectionName = collectionName
+        };
+        applicationDbContext.Documents.Add(document);
+        await applicationDbContext.SaveChangesAsync(cancellationToken);
+
+        await dataLoader.LoadPdf(collectionName, fileBtyes, applicationConfig.RagConfig.DataLoadingBatchSize,
+            applicationConfig.RagConfig.DataLoadingBetweenBatchDelayInMs, cancellationToken);
+
+
+        return document.Id;
     }
 }

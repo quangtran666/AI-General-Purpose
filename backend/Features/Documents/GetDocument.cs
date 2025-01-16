@@ -18,36 +18,36 @@ public class GetDocumentController : ApiControllerBase
         var document = await Mediator.Send(query, cancellationToken);
         return document is null ? NotFound() : Ok(document);
     }
-    
-    public record GetDocumentQuery(int Id) : IRequest<DocumentDto>;
-    
-    public record DocumentDto(string Name, string presignedUrl, int? FolderId, string UserId);
+}
 
-    internal sealed class GetDocumentQueryValidator : AbstractValidator<GetDocumentQuery>
+public record GetDocumentQuery(int Id) : IRequest<DocumentDto>;
+    
+public record DocumentDto(string Name, string presignedUrl, int? FolderId, string UserId);
+
+internal sealed class GetDocumentQueryValidator : AbstractValidator<GetDocumentQuery>
+{
+    public GetDocumentQueryValidator()
     {
-        public GetDocumentQueryValidator()
-        {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .WithMessage("Id is required");
-        }
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required");
     }
+}
 
-    internal sealed class GetDocumentQueryHandler(S3Services s3Services, ApplicationDbContext applicationDbContext) : IRequestHandler<GetDocumentQuery, DocumentDto>
+internal sealed class GetDocumentQueryHandler(S3Services s3Services, ApplicationDbContext applicationDbContext) : IRequestHandler<GetDocumentQuery, DocumentDto>
+{
+    public async Task<DocumentDto> Handle(GetDocumentQuery request, CancellationToken cancellationToken)
     {
-        public async Task<DocumentDto> Handle(GetDocumentQuery request, CancellationToken cancellationToken)
-        {
-            var document = await applicationDbContext
-                .Documents
-                .AsNoTracking()
-                .Where(x => x.Id == request.Id)
-                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        var document = await applicationDbContext
+            .Documents
+            .AsNoTracking()
+            .Where(x => x.Id == request.Id)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
             
-            if (document is null) return null;
+        if (document is null) return null;
             
-            var presignedUrl = await s3Services.GetPresignedUrlAsync(document.StorageKey!);
+        var presignedUrl = await s3Services.GetPresignedUrlAsync(document.StorageKey!);
 
-            return new DocumentDto(document.Name, presignedUrl, document.FolderId, document.UserId);
-        }
+        return new DocumentDto(document.Name, presignedUrl, document.FolderId, document.UserId);
     }
 }

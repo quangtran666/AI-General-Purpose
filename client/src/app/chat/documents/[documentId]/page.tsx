@@ -73,7 +73,7 @@ function SpecificDocumentChatPage({
                     <PDFMessagesRenderer scrollToPage={scrollToPage}/>
                 </div>
                 <div className="flex items-center gap-2 mb-2 mr-4">
-                    <PDFInputHandler/>
+                    <PDFInputHandler documentId={documentId}/>
                 </div>
             </section>
         </div>

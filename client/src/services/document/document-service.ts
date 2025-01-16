@@ -5,6 +5,10 @@ export type UploadDocumentParams = {
     folderId: number | null
 }
 
+export type QueryDocumentParams = {
+    query: string,
+}
+
 export type Document = {
     name: string,
     presignedUrl: string,
@@ -25,5 +29,16 @@ export const documentService = {
     },
     getDocumentById: async (id: number) => {
         return axiosInstance.get<Document>(`/documents?id=${id}`);
+    },
+    queryDocumentById: async (query: string, documentId: number) => {
+        return axiosInstance.post<string>(`/documents/${documentId}/query`,
+            {
+                query
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
     }
 }
