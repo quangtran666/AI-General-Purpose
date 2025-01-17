@@ -7,6 +7,7 @@ import {usePDFStore} from "@/stores/pdfstore";
 import PDFMessagesRenderer from "./_components/pdf-messages-renderer";
 import PDFInputHandler from "./_components/pdf-input-handler";
 import {useGetDocumentById} from "@/services/document/useGetDocumentById";
+import Spinner from "@/components/small-components/spinner";
 
 const PDFViewer = dynamic(() => import("./_components/pdf-viewer"), {
     ssr: false,
@@ -20,7 +21,7 @@ function SpecificDocumentChatPage({
     const {setCurrentPage, getPdfNumPages} = usePDFStore();
     const [pageRefs, setPageRefs] = useState<(HTMLDivElement | null)[]>([]);
     const {documentId} = use(params);
-    const {data} = useGetDocumentById(Number(documentId));
+    const {data, isLoading} = useGetDocumentById(Number(documentId));
 
     const setPageRef = useCallback(
         (index: number, ref: HTMLDivElement | null) => {
@@ -58,8 +59,8 @@ function SpecificDocumentChatPage({
                     />
                 </div>
                 <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-white">
-                    <PDFViewer 
-                        documentId={documentId} 
+                    <PDFViewer
+                        documentId={documentId}
                         setPageRef={setPageRef}
                         presignedUrl={data?.presignedUrl}
                     />
@@ -70,7 +71,10 @@ function SpecificDocumentChatPage({
                     <strong className="text-lg text-nowrap">Chat</strong>
                 </div>
                 <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-white">
-                    <PDFMessagesRenderer scrollToPage={scrollToPage}/>
+                    {isLoading ? <Spinner/> : <PDFMessagesRenderer
+                        scrollToPage={scrollToPage}
+                        document={data}
+                    />}
                 </div>
                 <div className="flex items-center gap-2 mb-2 mr-4">
                     <PDFInputHandler documentId={documentId}/>

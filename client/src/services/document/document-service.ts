@@ -13,7 +13,18 @@ export type Document = {
     name: string,
     presignedUrl: string,
     folderId: number,
-    userId: string
+    userId: string,
+    messages: Message[]
+}
+
+export type Message = {
+    content: string,
+    role: string
+}
+
+export type Citation = {
+    description: string,
+    pageNumber: number
 }
 
 export const documentService = {

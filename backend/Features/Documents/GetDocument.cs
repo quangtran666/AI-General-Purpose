@@ -22,7 +22,9 @@ public class GetDocumentController : ApiControllerBase
 
 public record GetDocumentQuery(int Id) : IRequest<DocumentDto>;
     
-public record DocumentDto(string Name, string presignedUrl, int? FolderId, string UserId);
+public record DocumentDto(string Name, string presignedUrl, int? FolderId, string UserId, List<MessageDto> Messages);
+
+public record MessageDto(string Content, string Role);
 
 internal sealed class GetDocumentQueryValidator : AbstractValidator<GetDocumentQuery>
 {
@@ -40,6 +42,7 @@ internal sealed class GetDocumentQueryHandler(S3Services s3Services, Application
     {
         var document = await applicationDbContext
             .Documents
+            .Include(x => x.Messages)
             .AsNoTracking()
             .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
@@ -48,6 +51,11 @@ internal sealed class GetDocumentQueryHandler(S3Services s3Services, Application
             
         var presignedUrl = await s3Services.GetPresignedUrlAsync(document.StorageKey!);
 
-        return new DocumentDto(document.Name, presignedUrl, document.FolderId, document.UserId);
+        return new DocumentDto(
+            document.Name, 
+            presignedUrl, 
+            document.FolderId, 
+            document.UserId, 
+            document.Messages.Select(x => new MessageDto(x.Content, x.Role.ToString())).ToList());
     }
 }

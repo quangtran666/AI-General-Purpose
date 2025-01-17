@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using backend.Common;
+using backend.Common.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,8 @@ using Microsoft.SemanticKernel.Data;
 using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
 using shared.Data;
+using shared.Enums;
+using shared.Models;
 using shared.VectorModels;
 
 namespace backend.Features.Documents;
@@ -33,8 +36,6 @@ public sealed record QueryDocumentCommand(int DocumentId, string Query) : IReque
 
 public sealed record QueryDocumentResponse(string Content, List<Citation> Citations);
 
-public sealed record Citation(string Description, int PageNumber);
-
 internal sealed class QueryDocumentCommandValidator : AbstractValidator<QueryDocumentCommand>
 {
     public QueryDocumentCommandValidator()
@@ -54,12 +55,24 @@ internal sealed class QueryDocumentCommandHandler(
 #pragma warning restore SKEXP0001
 ) : IRequestHandler<QueryDocumentCommand, QueryDocumentResponse>
 {
+    // Todo: Refactor this method
     public async Task<QueryDocumentResponse> Handle(QueryDocumentCommand request, CancellationToken cancellationToken)
     {
         // Retrive the document from the database
         var document = await applicationDbContext.Documents
+            .Include(x => x.Messages)
             .Where(x => x.Id == request.DocumentId)
             .FirstOrDefaultAsync(cancellationToken);
+        
+        if (document is null) return null;
+
+        await using var transaction = await applicationDbContext.Database.BeginTransactionAsync(cancellationToken);
+        // Save the user query
+        document.Messages.Add(new Message
+        {
+            Content = JsonSerializer.Serialize(request.Query),
+            Role = MessageRole.User
+        });
 
         // Setup vectorCollection, textSearch for the vectorCollection
         var vectorRecordCollection = vectorStore.GetCollection<Guid, TextSnippet>(document.VectorCollectionName);
@@ -107,6 +120,15 @@ internal sealed class QueryDocumentCommandHandler(
 
         // Deserialize the response
         var result = JsonSerializer.Deserialize<QueryDocumentResponse>(response.ToString());
+        // Save the response
+        document.Messages.Add(new Message
+        {
+            Content = response.ToString(),
+            Role = MessageRole.AI
+        });
+        await applicationDbContext.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        
         return result;
     }
 }
