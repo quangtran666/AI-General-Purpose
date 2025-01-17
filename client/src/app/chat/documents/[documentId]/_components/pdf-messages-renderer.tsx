@@ -1,68 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Image from "next/image";
 import {SendHorizontal} from "lucide-react";
-import {Citation, Document} from "@/services/document/document-service";
-import html from 'remark-html';
-import {remark} from "remark";
-import matter from "gray-matter";
+import {usePDFStore} from "@/stores/pdfstore";
 
 interface PDFMessagesRendererProps {
     scrollToPage: (pageNumber: number) => void;
-    document: Document | undefined;
+    documentId: string;
 }
 
-interface MessageUser {
-    content: string;
-    role: "USER";
-}
-
-interface MessageAI {
-    content: string;
-    citations: Citation[];
-    role: "AI";
-}
-
-// Todo: 
-function PDFMessagesRenderer({scrollToPage, document}: PDFMessagesRendererProps) {
-    const [chatContents, setChatContents] = useState<(MessageUser | MessageAI)[]>([]);
-    
-    useEffect(() => {
-        const processMessages = async () => {
-            if (!document?.messages) return;
-            
-            const processedMessages = await Promise.all(document?.messages.map(async (message) => {
-                if (message.role === "AI") {
-                    const parsedContent = JSON.parse(message.content);
-                    const matterResult = matter(parsedContent.Content);
-                    const processedContent = await remark()
-                        .use(html)
-                        .process(matterResult.content);
-
-                    return {
-                        content: processedContent.toString(),
-                        role: "AI",
-                        citations: parsedContent.Citations.map((citation: any) => {
-                            return {
-                                description: citation.Description,
-                                pageNumber: citation.PageNumber,
-                            };
-                        }),
-                    } as MessageAI;
-                }
-                else {
-                    return { content: message.content, role: "USER" } as MessageUser;
-                }
-            }));
-            
-            setChatContents(processedMessages);
-        }
-        
-        processMessages();
-    }, [])
+// Todo: Refactor this component to use the new design system
+function PDFMessagesRenderer({scrollToPage, documentId}: PDFMessagesRendererProps) {
+    const {getMessages} = usePDFStore();
     
     return (
         <>
-            {chatContents?.map((chat, index) => (
+            {getMessages(documentId).map((chat, index) => (
                 <div
                     key={index}
                     className={`flex items-start gap-2 my-3 ${

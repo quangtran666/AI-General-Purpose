@@ -1,13 +1,17 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, {use, useCallback, useState} from "react";
+import React, {use, useCallback, useEffect, useState} from "react";
 import PDFInteracionButtons from "./_components/pdf-interaction-buttons";
-import {usePDFStore} from "@/stores/pdfstore";
+import {MessageAI, MessageUser, usePDFStore} from "@/stores/pdfstore";
 import PDFMessagesRenderer from "./_components/pdf-messages-renderer";
 import PDFInputHandler from "./_components/pdf-input-handler";
 import {useGetDocumentById} from "@/services/document/useGetDocumentById";
 import Spinner from "@/components/small-components/spinner";
+import matter from "gray-matter";
+import {remark} from "remark";
+import html from "remark-html";
+import {parseAIMessageAndConvertToHtml} from "@/lib/message.utils";
 
 const PDFViewer = dynamic(() => import("./_components/pdf-viewer"), {
     ssr: false,
@@ -18,7 +22,7 @@ function SpecificDocumentChatPage({
                                   }: {
     params: Promise<{ documentId: string }>;
 }) {
-    const {setCurrentPage, getPdfNumPages} = usePDFStore();
+    const {setCurrentPage, getPdfNumPages, setMessages} = usePDFStore();
     const [pageRefs, setPageRefs] = useState<(HTMLDivElement | null)[]>([]);
     const {documentId} = use(params);
     const {data, isLoading} = useGetDocumentById(Number(documentId));
@@ -46,6 +50,26 @@ function SpecificDocumentChatPage({
         [documentId, getPdfNumPages, pageRefs, setCurrentPage]
     );
 
+    // Todo: Refactor this component to use the new design system
+    useEffect(() => {
+        const processMessages = async () => {
+            if (!data?.messages) return;
+
+            const processedMessages = await Promise.all(data?.messages.map(async (message) => {
+                if (message.role === "AI") {
+                    return await parseAIMessageAndConvertToHtml(message);
+                }
+                else {
+                    return { content: message.content.slice(1, -1), role: "USER" } as MessageUser;
+                }
+            }));
+            
+            setMessages(documentId, processedMessages);
+        }
+
+        processMessages();
+    }, [isLoading])
+
     return (
         <div className="flex">
             <section className="w-1/2 border-r-1 border-r-main_border_color h-svh flex flex-col">
@@ -72,8 +96,8 @@ function SpecificDocumentChatPage({
                 </div>
                 <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-white">
                     {isLoading ? <Spinner/> : <PDFMessagesRenderer
+                        documentId={documentId}
                         scrollToPage={scrollToPage}
-                        document={data}
                     />}
                 </div>
                 <div className="flex items-center gap-2 mb-2 mr-4">

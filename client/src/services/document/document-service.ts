@@ -22,6 +22,11 @@ export type Message = {
     role: string
 }
 
+export type QueryResponse = {
+    content: string,
+    citations: Citation[]
+}
+
 export type Citation = {
     description: string,
     pageNumber: number
@@ -42,7 +47,7 @@ export const documentService = {
         return axiosInstance.get<Document>(`/documents?id=${id}`);
     },
     queryDocumentById: async (query: string, documentId: number) => {
-        return axiosInstance.post<string>(`/documents/${documentId}/query`,
+        return axiosInstance.post<QueryResponse>(`/documents/${documentId}/query`,
             {
                 query
             },
