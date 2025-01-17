@@ -1,4 +1,5 @@
-﻿using backend.Common;
+﻿using System.Text.Json;
+using backend.Common;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.VectorData;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Data;
 using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
@@ -14,8 +16,8 @@ using shared.VectorModels;
 
 namespace backend.Features.Documents;
 
-public class QueryDocumentController : ApiControllerBase
-{
+public sealed class QueryDocumentController : ApiControllerBase
+{ 
     [Authorize]
     [HttpPost("/api/documents/{documentId:int}/query")]
     public async Task<ActionResult<string>> Query([FromRoute] int documentId, [FromBody] QueryDocumentRequest request,
@@ -25,9 +27,13 @@ public class QueryDocumentController : ApiControllerBase
     }
 }
 
-public record QueryDocumentRequest(string Query);
+public sealed record QueryDocumentRequest(string Query);
 
-public record QueryDocumentCommand(int DocumentId, string Query) : IRequest<string>;
+public sealed record QueryDocumentCommand(int DocumentId, string Query) : IRequest<QueryDocumentResponse>;
+
+public sealed record QueryDocumentResponse(string Content, List<Citation> Citations);
+
+public sealed record Citation(string Description, int PageNumber);
 
 internal sealed class QueryDocumentCommandValidator : AbstractValidator<QueryDocumentCommand>
 {
@@ -46,34 +52,35 @@ internal sealed class QueryDocumentCommandHandler(
 #pragma warning disable SKEXP0001
     ITextEmbeddingGenerationService textEmbeddingGenerationService
 #pragma warning restore SKEXP0001
-) : IRequestHandler<QueryDocumentCommand, string>
+) : IRequestHandler<QueryDocumentCommand, QueryDocumentResponse>
 {
-    public async Task<string> Handle(QueryDocumentCommand request, CancellationToken cancellationToken)
+    public async Task<QueryDocumentResponse> Handle(QueryDocumentCommand request, CancellationToken cancellationToken)
     {
+        // Retrive the document from the database
         var document = await applicationDbContext.Documents
             .Where(x => x.Id == request.DocumentId)
             .FirstOrDefaultAsync(cancellationToken);
 
+        // Setup vectorCollection, textSearch for the vectorCollection
         var vectorRecordCollection = vectorStore.GetCollection<Guid, TextSnippet>(document.VectorCollectionName);
-        
 #pragma warning disable SKEXP0001
         var textSearch = new VectorStoreTextSearch<TextSnippet>(
             vectorRecordCollection,
-            textEmbeddingGenerationService,
-            new TextSearchStringMapper(result => (result as TextSnippet).Text),
-            new TextSearchResultMapper(result =>
-            {
-                var castResult = result as TextSnippet;
-#pragma warning disable SKEXP0001
-                return new TextSearchResult(value: castResult.Text)
-#pragma warning restore SKEXP0001
-                    { Name = castResult.Text, Link = castResult.PageNumber };
-            }));
+            textEmbeddingGenerationService);
 #pragma warning restore SKEXP0001
         
-        var searchPlugins = textSearch.CreateWithGetTextSearchResults("SearchPlugin");
-        kernel.Plugins.Add(searchPlugins);
+        // Add the textSearch plugin to the kernel
+        var searchPlugin = textSearch.CreateWithGetTextSearchResults("SearchPlugin");
+        kernel.Plugins.Add(searchPlugin);
 
+        // Using JSON Schema for Structured Output
+        var excutionSettings = new OpenAIPromptExecutionSettings
+        {
+#pragma warning disable SKEXP0010
+            ResponseFormat = typeof(QueryDocumentResponse)
+#pragma warning restore SKEXP0010
+        };
+        
         var response = await kernel.InvokePromptAsync(
             promptTemplate: """
                             Please use this information to answer the question:
@@ -81,7 +88,7 @@ internal sealed class QueryDocumentCommandHandler(
                               {{#each this}}  
                                 Name: {{Name}}
                                 Value: {{Value}}
-                                Link: {{Link}}
+                                Page Number: {{Link}}
                                 -----------------
                               {{/each}}
                             {{/with}}
@@ -90,7 +97,7 @@ internal sealed class QueryDocumentCommandHandler(
 
                             Question: {{query}}
                             """,
-            arguments: new KernelArguments
+            arguments: new KernelArguments(excutionSettings)
             {
                 { "query", request.Query }
             },
@@ -98,6 +105,8 @@ internal sealed class QueryDocumentCommandHandler(
             promptTemplateFactory: new HandlebarsPromptTemplateFactory(),
             cancellationToken: cancellationToken);
 
-        return response.ToString();
+        // Deserialize the response
+        var result = JsonSerializer.Deserialize<QueryDocumentResponse>(response.ToString());
+        return result;
     }
 }
