@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, {use, useCallback, useEffect, useState} from "react";
+import React, {use, useCallback, useEffect, useRef, useState} from "react";
 import PDFInteracionButtons from "./_components/pdf-interaction-buttons";
 import {MessageAI, MessageUser, usePDFStore} from "@/stores/pdfstore";
 import PDFMessagesRenderer from "./_components/pdf-messages-renderer";
@@ -12,63 +12,18 @@ import matter from "gray-matter";
 import {remark} from "remark";
 import html from "remark-html";
 import {parseAIMessageAndConvertToHtml} from "@/lib/message.utils";
+import {usePDFNavigation} from "@/app/chat/documents/[documentId]/_hooks/usePDFNavigation";
+import {useMessagesProcessAndScroll} from "@/app/chat/documents/[documentId]/_hooks/useMessagesProcessAndScroll";
 
 const PDFViewer = dynamic(() => import("./_components/pdf-viewer"), {
     ssr: false,
 });
 
-function SpecificDocumentChatPage({
-                                      params,
-                                  }: {
-    params: Promise<{ documentId: string }>;
-}) {
-    const {setCurrentPage, getPdfNumPages, setMessages} = usePDFStore();
-    const [pageRefs, setPageRefs] = useState<(HTMLDivElement | null)[]>([]);
+function SpecificDocumentChatPage({params}: { params: Promise<{ documentId: string }> }) {
     const {documentId} = use(params);
     const {data, isLoading} = useGetDocumentById(Number(documentId));
-
-    const setPageRef = useCallback(
-        (index: number, ref: HTMLDivElement | null) => {
-            setPageRefs((prev) => {
-                const newRefs = [...prev];
-                newRefs[index] = ref;
-                return newRefs;
-            });
-        },
-        []
-    );
-
-    // Scroll to certain page then set the current page
-    const scrollToPage = useCallback(
-        (pageNumber: number) => {
-            if (pageNumber < 0 || pageNumber > getPdfNumPages(documentId)) return;
-
-            const pageRef = pageRefs[pageNumber];
-            pageRef?.scrollIntoView({behavior: "smooth"});
-            setCurrentPage(documentId, pageNumber);
-        },
-        [documentId, getPdfNumPages, pageRefs, setCurrentPage]
-    );
-
-    // Todo: Refactor this component to use the new design system
-    useEffect(() => {
-        const processMessages = async () => {
-            if (!data?.messages) return;
-
-            const processedMessages = await Promise.all(data?.messages.map(async (message) => {
-                if (message.role === "AI") {
-                    return await parseAIMessageAndConvertToHtml(message);
-                }
-                else {
-                    return { content: message.content.slice(1, -1), role: "USER" } as MessageUser;
-                }
-            }));
-            
-            setMessages(documentId, processedMessages);
-        }
-
-        processMessages();
-    }, [isLoading])
+    const {scrollToPage, setPageRef} = usePDFNavigation(documentId);
+    const {anchorEndMessages} = useMessagesProcessAndScroll(documentId, isLoading, data);
 
     return (
         <div className="flex">
@@ -99,9 +54,12 @@ function SpecificDocumentChatPage({
                         documentId={documentId}
                         scrollToPage={scrollToPage}
                     />}
+                    <div ref={anchorEndMessages}></div>
                 </div>
                 <div className="flex items-center gap-2 mb-2 mr-4">
-                    <PDFInputHandler documentId={documentId}/>
+                    <PDFInputHandler
+                        documentId={documentId}
+                    />
                 </div>
             </section>
         </div>
