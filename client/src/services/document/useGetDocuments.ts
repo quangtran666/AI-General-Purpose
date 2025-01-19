@@ -9,6 +9,7 @@ export const useGetDocuments = () => {
     const query = useQuery({
         queryKey: ["documents"],
         queryFn: async () => {
+            console.log("Fetching documents")
             setAuth(session?.accessToken ?? "")
             return await documentService.getDocuments()
         },
@@ -16,8 +17,9 @@ export const useGetDocuments = () => {
     })
     
     return {
-        data: query.data?.data,
+        documents: query.data?.data,
         isLoading: query.isLoading,
-        isError: query.isError
+        isError: query.isError,
+        isPending: query.isFetching
     }
 }

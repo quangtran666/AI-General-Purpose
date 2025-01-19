@@ -1,16 +1,11 @@
 ﻿import FolderItems from "@/components/overview/folder-items";
 import SingleItem from "@/components/overview/single-item";
 import React from "react";
-import {useGetDocuments} from "@/services/document/useGetDocuments";
-import {groupBy} from "lodash";
+import {useGetDocumentsAndFolders} from "@/services/common/useGetDocumentsAndFolders";
 
 const renderDocumentsFolders = () => {
-    const {data, isLoading} = useGetDocuments();
-
-    const filterData = groupBy(data, "folderId");
-
-    console.log(filterData);
-
+    const { groupResult, isLoading } = useGetDocumentsAndFolders();
+    
     return (
         <>
             {isLoading
@@ -22,15 +17,14 @@ const renderDocumentsFolders = () => {
                 <>
                     <div className="space-y-1">
                         {
-                            Object.keys(filterData).map((key, indexKey) => {
-                                return (key !== 'null') ? (
+                            groupResult && Object.keys(groupResult).map((key, indexKey) => {
+                                return (key !== "noFolder") ? (
                                     <FolderItems
                                         key={indexKey}
-                                        folderName={filterData[key][0].folderName}
-                                        documents={filterData[key]}
+                                        folderGroup={groupResult[Number(key)]}
                                     />
                                 ) : (
-                                    filterData[key].map((item, indexItem) => {
+                                    groupResult[key].documents.map((item, indexItem) => {
                                         return <SingleItem
                                             key={indexItem}
                                             document={item}

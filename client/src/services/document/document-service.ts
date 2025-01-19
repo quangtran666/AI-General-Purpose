@@ -37,12 +37,16 @@ export type Documents = {
     documentName: string,
     folderId: number | null,
     folderName: string | null,
+    folderDescription: string | null,
 }
 
 export const documentService = {
     uploadDocument: async ({file, folderId} : UploadDocumentParams) => {
         const formData = new FormData();
         formData.append("File", file);
+        if (folderId) {
+            formData.append("FolderId", folderId.toString());
+        }
         
         return axiosInstance.post<number>("/documents?", formData, {
             headers: {

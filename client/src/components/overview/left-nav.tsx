@@ -11,6 +11,7 @@ import UserSettings from "@/components/overview/user-settings";
 import FolderItems from "@/components/overview/folder-items";
 import SingleItem from "@/components/overview/single-item";
 import RenderDocumentsFolders from "@/components/overview/render-documents-folders";
+import {useGetDocumentsAndFolders} from "@/services/common/useGetDocumentsAndFolders";
 
 function LeftNav() {
     const {status} = useSession()
@@ -40,7 +41,7 @@ function LeftNav() {
             </section>
             <section>
                 <LanguagesSelection/>
-                <UserSettings />
+                <UserSettings/>
             </section>
         </div>
     );
