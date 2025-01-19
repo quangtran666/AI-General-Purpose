@@ -10,6 +10,7 @@ import {useSession} from "next-auth/react";
 import UserSettings from "@/components/overview/user-settings";
 import FolderItems from "@/components/overview/folder-items";
 import SingleItem from "@/components/overview/single-item";
+import RenderDocumentsFolders from "@/components/overview/render-documents-folders";
 
 function LeftNav() {
     const {status} = useSession()
@@ -33,8 +34,7 @@ function LeftNav() {
                     </div>
                     :
                     <>
-                        <FolderItems />
-                        <SingleItem />
+                        <RenderDocumentsFolders />
                     </>
                 }
             </section>

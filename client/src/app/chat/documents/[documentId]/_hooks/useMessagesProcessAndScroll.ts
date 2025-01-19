@@ -1,9 +1,9 @@
 ﻿import {parseAIMessageAndConvertToHtml} from "@/lib/message.utils";
 import {MessageUser, usePDFStore} from "@/stores/pdfstore";
 import {useEffect, useRef} from "react";
-import {Document} from "@/services/document/document-service";
+import {DocumentById} from "@/services/document/document-service";
 
-export const useMessagesProcessAndScroll = (documentId: string, isLoading: boolean, data: Document | undefined) => {
+export const useMessagesProcessAndScroll = (documentId: string, isLoading: boolean, data: DocumentById | undefined) => {
     const anchorEndMessages = useRef<HTMLDivElement>(null);
     const {setMessages, messages} = usePDFStore();
     

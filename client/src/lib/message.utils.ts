@@ -1,10 +1,10 @@
 ﻿import {MessageAI} from "@/stores/pdfstore";
-import {Message, QueryResponse} from "@/services/document/document-service";
+import {MessageById, QueryResponse} from "@/services/document/document-service";
 import matter from "gray-matter";
 import {remark} from "remark";
 import html from "remark-html";
 
-export const parseAIMessageAndConvertToHtml = async (message: Message) : Promise<MessageAI> => {
+export const parseAIMessageAndConvertToHtml = async (message: MessageById) : Promise<MessageAI> => {
     const parsedContent = JSON.parse(message.content);
     const matterResult = matter(parsedContent.Content);
     const processedContent = await remark()
