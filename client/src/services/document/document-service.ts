@@ -1,4 +1,4 @@
-﻿import { axiosInstance } from "@/lib/axios"
+﻿import {axiosInstance} from "@/lib/axios"
 
 export type UploadDocumentParams = {
     file: File,
@@ -40,6 +40,10 @@ export type Documents = {
     folderDescription: string | null,
 }
 
+export type UpdateDocumentParams = {
+    documentName: string
+}
+
 export const documentService = {
     uploadDocument: async ({file, folderId} : UploadDocumentParams) => {
         const formData = new FormData();
@@ -70,5 +74,17 @@ export const documentService = {
                     "Content-Type": "application/json",
                 }
             })
+    },
+    updateDocumentById: async (id: number, {documentName}: UpdateDocumentParams) => {
+        return axiosInstance.put(`/documents/${id}`, {
+            documentName: documentName
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+    },
+    deleleDocumentById: async (id: number) => {
+        return axiosInstance.delete(`/documents/${id}`);
     }
 }

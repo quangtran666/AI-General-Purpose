@@ -62,7 +62,7 @@ internal sealed class CreateDocumentCommandHandler(
 
         var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
                      ?? throw new InvalidOperationException("UserName Identifier not found");
-        var collectionName = $"pdfs-{userId}-{request.File.FileName}";
+        var collectionName = $"pdfs-{Guid.NewGuid()}-{userId}-{request.File.FileName}";
         var document = new Document
         {
             Name = request.File.FileName,

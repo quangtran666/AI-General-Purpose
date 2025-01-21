@@ -5,6 +5,11 @@ export type CreateFolderParams = {
     description: string
 }
 
+export type UpdateFolderParams = {
+    folderName: string,
+    folderDescription: string
+}
+
 export type Folder = {
     folderId: number,
     folderName: string,
@@ -26,5 +31,20 @@ export const folderService = {
     },
     getFolders: async () => {
         return axiosInstance.get<Folder[]>(`/folders`)
+    },
+    deleteFolderById: async (id: number) => {
+        return axiosInstance.delete(`/folders/${id}`)
+    },
+    updateFolderById: async (id: number, folder: UpdateFolderParams) => {
+        return axiosInstance.put(`/folders/${id}`,
+            {
+                FolderName: folder.folderName,
+                FolderDescription: folder.folderDescription
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
     }
 }

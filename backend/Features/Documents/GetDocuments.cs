@@ -31,7 +31,7 @@ internal class GetDocumentsQueryHandler(
         return await applicationDbContext.Documents
             .AsNoTracking()
             .Include(x => x.Folder)
-            .Where(x => x.UserId == httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+            .Where(x => x.UserId == httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) && x.IsDeleted == false)
             .Select(x => new DocumentsDto(x.Id, x.Name, x.FolderId, x.Folder.Name, x.Folder.Description))
             .ToListAsync(cancellationToken);
     }

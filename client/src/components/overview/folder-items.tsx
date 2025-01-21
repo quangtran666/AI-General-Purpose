@@ -4,12 +4,9 @@ import Link from "next/link";
 import {MessageCircleMore} from "lucide-react";
 import React from "react";
 import useCustomDropZone from "@/components/utils/custom-drop-zone";
-import {useToast} from "@/hooks/use-toast";
-import {DropEvent, FileRejection} from "react-dropzone";
-import {Documents} from "@/services/document/document-service";
 import {FolderGroup} from "@/services/common/useGetDocumentsAndFolders";
 import {useDocumentUpload} from "@/services/document/useDocumentUpload";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 interface FolderItemsProps {
     folderGroup: FolderGroup;
@@ -19,12 +16,20 @@ function FolderItems({folderGroup}: FolderItemsProps) {
     const {handleDrop, isUploading} = useDocumentUpload(folderGroup.folderId);
     const {getRootProps, getInputProps} = useCustomDropZone({maxFiles: 1, onDrop: handleDrop});
     const {documentId} = useParams();
+    const router = useRouter();
+    
+    const routeToFolderPage = () => {
+        // Todo: Prevent routing to the same page
+        router.push(`/chat/folders/${folderGroup.folderId}`);
+    }
 
     return (
         <>
             <Accordion type="single" collapsible>
                 <AccordionItem className="border-b-0" value="item-1">
-                    <AccordionTrigger className="bg-zinc-700 p-2 rounded-lg hover:no-underline">
+                    <AccordionTrigger 
+                        onClick={routeToFolderPage}
+                        className="bg-zinc-700 p-2 rounded-lg hover:no-underline">
                         {isUploading ?
                             <>
                                 <span className="truncate">Uploading to folder {folderGroup.folderName} ...</span>

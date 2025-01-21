@@ -29,7 +29,7 @@ public class GetFoldersController : ApiControllerBase
         {
             return await applicationDbContext.Folders
                 .AsNoTracking()
-                .Where(x => x.UserId == httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Where(x => x.UserId == httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) && x.IsDeleted == false)
                 .Select(x => new FoldersDto(x.Id, x.Name, x.Description))
                 .ToListAsync(cancellationToken);
         }

@@ -35,7 +35,7 @@ function NewFolderButton() {
                 <Button className="bg-leftnav text-white border-1 border-slate-500 p-5">
                     {isCreating ? (
                         <>
-                            <div className="animate-bounce">
+                            <div className="animate-bounce flex gap-2 items-center">
                                 <CloudUpload />
                                 <span>Creating folder...</span>
                             </div>
