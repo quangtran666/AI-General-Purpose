@@ -4,6 +4,7 @@ using backend.Infrastructure.Options;
 using backend.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using shared.Data;
@@ -23,7 +24,15 @@ public static class HostingExtension
             .AddJwtBearer(options =>
             {
                 options.Authority = "https://localhost:5002";
-                options.TokenValidationParameters.ValidateAudience = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudiences = ["backendapi"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    RequireExpirationTime = true,
+                    ValidTypes = ["at+jwt"]
+                };
             });
 
         app.Services.AddAuthorization();

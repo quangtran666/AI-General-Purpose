@@ -127,5 +127,15 @@ public class SeedData
 
             context.SaveChanges();
         }
+        
+        if (!context.ApiResources.Any())
+        {
+            foreach (var resource in Config.ApiResources)
+            {
+                context.ApiResources.Add(resource.ToEntity());
+            }
+
+            context.SaveChanges();
+        }
     }
 }

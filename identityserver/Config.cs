@@ -9,28 +9,24 @@ public static class Config
     [
         new IdentityResources.OpenId(),
         new IdentityResources.Profile(),
-        new IdentityResource("identity", ["email"])
+        new IdentityResource("identity", ["email"]),
+    ];
+
+    public static IEnumerable<ApiResource> ApiResources =>
+    [
+        new ApiResource("backendapi", "BackendAPI")
+        {
+            Scopes = { "backendapi.fullaccess" }
+        }
     ];
 
     public static IEnumerable<ApiScope> ApiScopes =>
     [
-        new ApiScope("scope1"),
-        new ApiScope("scope2")
+        new ApiScope("backendapi.fullaccess")
     ];
 
     public static IEnumerable<Client> Clients =>
     [
-        // m2m client credentials flow client
-        new()
-        {
-            ClientId = "m2m.client",
-            ClientName = "Client Credentials Client",
-
-            AllowedGrantTypes = GrantTypes.ClientCredentials,
-            ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-            AllowedScopes = { "scope1" }
-        },
         new()
         {
             ClientId = "next_web_app",
@@ -39,6 +35,10 @@ public static class Config
 
             AllowOfflineAccess = true,
             AllowedGrantTypes = GrantTypes.Code,
+            AccessTokenLifetime = 3600,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
+            SlidingRefreshTokenLifetime = 1296000,
+            AbsoluteRefreshTokenLifetime = 648000,
 
             RedirectUris = { "http://localhost:3000/api/auth/callback/identityserver" },
             PostLogoutRedirectUris = { "http://localhost:3000" },
@@ -47,7 +47,9 @@ public static class Config
             {
                 IdentityServerConstants.StandardScopes.OpenId,
                 IdentityServerConstants.StandardScopes.Profile,
+                IdentityServerConstants.StandardScopes.OfflineAccess,
                 "identity",
+                "backendapi.fullaccess"
             },
             RequireConsent = true
         }
