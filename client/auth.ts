@@ -86,9 +86,6 @@ const authOptions: AuthOptions = {
                 token.email = profile?.email;
             }
             
-            console.log(Date.now())
-            console.log(token.accessTokenExpires)
-            
             if (Date.now() < token.accessTokenExpires) {
                 return token;
             }

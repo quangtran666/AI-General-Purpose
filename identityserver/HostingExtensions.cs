@@ -1,7 +1,9 @@
 using Duende.IdentityServer;
 using identityserver.Data;
 using identityserver.ProfileServices;
+using identityserver.Services.Mails;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using shared.Data;
@@ -15,6 +17,9 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
+        builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection(AuthMessageSenderOptions.MailTrap));
+        builder.Services.AddTransient<IEmailSender, MailTrapSender>();
+        
         var chatPPFDBConnectionString = builder.Configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
         var identityServerDBConnectionString = builder.Configuration.GetConnectionString("IdentityServerDBConnectionString");
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
@@ -22,7 +27,11 @@ internal static class HostingExtensions
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(chatPPFDBConnectionString));
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(configuration =>
+            {
+                configuration.SignIn.RequireConfirmedEmail = true;
+                configuration.SignIn.RequireConfirmedAccount = true;
+            })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 

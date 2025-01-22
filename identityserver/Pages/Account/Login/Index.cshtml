@@ -1,4 +1,4 @@
-@page
+@page "/Account/Login"
 @model identityserver.Pages.Login.Index
 
 <div class="login-page">
@@ -47,6 +47,9 @@
                             <button class="btn btn-primary" name="Input.Button" value="login">Login</button>
                             <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
                         </form>
+                        <div class="mt-3">
+                            <p>Don't have an account? <a asp-page="/Account/Register/Register" asp-route-returnUrl="@Model.Input.ReturnUrl">Register here</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
