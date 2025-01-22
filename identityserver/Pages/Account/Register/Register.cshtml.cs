@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using System.Text.Encodings.Web;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,8 +21,7 @@ namespace identityserver.Pages.Account.Register
         IEmailSender emailSender)
         : PageModel
     {
-        [BindProperty]
-        public InputModel Input { get; set; }
+        [BindProperty] public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
 
@@ -40,6 +41,13 @@ namespace identityserver.Pages.Account.Register
             {
                 var user = new ApplicationUser() { UserName = Input.Email, Email = Input.Email };
                 var result = await userManager.CreateAsync(user, Input.Password);
+                await userManager.AddClaimsAsync(user, [
+                    new Claim(JwtClaimTypes.Name, user.UserName),
+                    new Claim(JwtClaimTypes.GivenName, user.UserName),
+                    new Claim(JwtClaimTypes.FamilyName, user.UserName),
+                    new Claim(JwtClaimTypes.WebSite, "https://www.example.com"),
+                ]);
+
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User created a new account with password.");
@@ -57,7 +65,8 @@ namespace identityserver.Pages.Account.Register
 
                     if (userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("/Account/RegisterConfirmation/RegisterConfirmation", new { email = Input.Email, returnUrl });
+                        return RedirectToPage("/Account/RegisterConfirmation/RegisterConfirmation",
+                            new { email = Input.Email, returnUrl });
                     }
                     else
                     {
@@ -65,6 +74,7 @@ namespace identityserver.Pages.Account.Register
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
