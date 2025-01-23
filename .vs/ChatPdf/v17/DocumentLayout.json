@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Projects\\AI-General-Purpose\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\pages\\account\\lockout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\areas\\identity\\pages\\account\\lockout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\pages\\account\\lockout.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\areas\\identity\\pages\\account\\lockout.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\areas\\identity\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\pages\\account\\register\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\pages\\account\\register\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -29,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\areas\\identity\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -69,6 +81,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\hostingextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\hostingextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|c:\\projects\\ai-general-purpose\\identityserver\\areas\\identity\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EFF74229-C5FD-456D-8E25-985C1B4F282A}|identityserver\\identityserver.csproj|solutionrelative:identityserver\\areas\\identity\\pages\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -78,177 +94,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ViewModel.cs",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\ViewModel.cs",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\ViewModel.cs",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\ViewModel.cs",
-              "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\ViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:46:56.613Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "InputModel.cs",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\InputModel.cs",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\InputModel.cs",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\InputModel.cs",
-              "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\InputModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:46:54.331Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "InputModel.cs",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\InputModel.cs",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\InputModel.cs",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\InputModel.cs",
-              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\InputModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:45:50.141Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Register.cshtml.cs",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
-              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:44:34.949Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\Register.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml",
-              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\Register.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:32.295Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "_ViewStart.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewStart.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\_ViewStart.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewStart.cshtml",
-              "RelativeToolTip": "identityserver\\Pages\\_ViewStart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:13.796Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Pages\\_ViewImports.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "identityserver\\Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:12.886Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:04.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:03.468Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "_ViewStart.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:44:00.026Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ManageNavPages.cs",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:43:38.733Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:43:37.332Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "_ManageNav.cshtml",
-              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
-              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
-              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
-              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:43:33.134Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
@@ -259,7 +106,216 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ScaffoldingReadMe.txt",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\ScaffoldingReadMe.txt",
+              "RelativeDocumentMoniker": "identityserver\\ScaffoldingReadMe.txt",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\ScaffoldingReadMe.txt",
+              "RelativeToolTip": "identityserver\\ScaffoldingReadMe.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-01-22T15:37:11.296Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Lockout.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T15:37:11.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Lockout.cshtml.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml.cs",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml.cs",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Lockout.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T15:37:10.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T15:37:10.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "InputModel.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\InputModel.cs",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\InputModel.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\InputModel.cs",
+              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\InputModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T12:45:50.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Register.cshtml.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
+              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\Register.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T12:44:34.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Register\\Register.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Register\\Register.cshtml",
+              "RelativeToolTip": "identityserver\\Pages\\Account\\Register\\Register.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:32.295Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "_ValidationScriptsPartial.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ValidationScriptsPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:04.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "InputModel.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\InputModel.cs",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\InputModel.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\InputModel.cs",
+              "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\InputModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T12:46:54.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ViewModel.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\ViewModel.cs",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\ViewModel.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\ViewModel.cs",
+              "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\ViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T12:46:56.613Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewStart.cshtml",
+              "RelativeToolTip": "identityserver\\Pages\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:13.796Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Pages\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\_ViewImports.cshtml",
+              "RelativeToolTip": "identityserver\\Pages\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:12.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:03.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:44:00.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ManageNavPages.cs",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\ManageNavPages.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-22T12:43:38.733Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 14,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:43:37.332Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "_ManageNav.cshtml",
+              "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "RelativeDocumentMoniker": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "ToolTip": "C:\\Projects\\AI-General-Purpose\\identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "RelativeToolTip": "identityserver\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-22T12:43:33.134Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Program.cs",
               "RelativeDocumentMoniker": "identityserver\\Program.cs",
@@ -267,12 +323,11 @@
               "RelativeToolTip": "identityserver\\Program.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAACgAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T12:42:32.389Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T12:42:32.389Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\Index.cshtml",
               "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\Index.cshtml",
@@ -280,12 +335,11 @@
               "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\Index.cshtml",
               "ViewState": "AgIAAC0AAAAAAAAAAAAAADkAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T12:00:27.392Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T12:00:27.392Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "Index.cshtml.cs",
               "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\Pages\\Account\\Login\\Index.cshtml.cs",
               "RelativeDocumentMoniker": "identityserver\\Pages\\Account\\Login\\Index.cshtml.cs",
@@ -293,12 +347,11 @@
               "RelativeToolTip": "identityserver\\Pages\\Account\\Login\\Index.cshtml.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:59:30.881Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T11:59:30.881Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "HostingExtensions.cs",
               "DocumentMoniker": "C:\\Projects\\AI-General-Purpose\\identityserver\\HostingExtensions.cs",
               "RelativeDocumentMoniker": "identityserver\\HostingExtensions.cs",
@@ -306,8 +359,7 @@
               "RelativeToolTip": "identityserver\\HostingExtensions.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAQwCIAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:21:04.627Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T11:21:04.627Z"
             }
           ]
         }

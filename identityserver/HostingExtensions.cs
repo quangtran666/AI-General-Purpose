@@ -63,12 +63,16 @@ internal static class HostingExtensions
             .AddGoogle(options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                // register your IdentityServer with Google at https://console.developers.google.com
-                // enable the Google+ API
-                // set the redirect URI to https://localhost:5001/signin-google
-                options.ClientId = "copy client ID from Google here";
-                options.ClientSecret = "copy client secret from Google here";
+                options.ClientId = builder.Configuration["ExternalProviders:Google:ClientId"];
+                options.ClientSecret = builder.Configuration["ExternalProviders:Google:ClientSecret"];
+            })
+            .AddGitHub(options =>
+            {
+                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                options.ClientId = builder.Configuration["ExternalProviders:GitHub:ClientId"];
+                options.ClientSecret = builder.Configuration["ExternalProviders:GitHub:ClientSecret"];
+                options.CallbackPath = "/signin-oidc-github";
+                options.Scope.Add("user:email");
             });
 
         return builder.Build();
