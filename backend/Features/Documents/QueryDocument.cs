@@ -82,10 +82,26 @@ internal sealed class QueryDocumentCommandHandler(
             textEmbeddingGenerationService);
 #pragma warning restore SKEXP0001
         
-        // Add the textSearch plugin to the kernel
-        var searchPlugin = textSearch.CreateWithGetTextSearchResults("SearchPlugin");
+        // Create options to describe the function i want to register
+        var options = new KernelFunctionFromMethodOptions
+        {
+            FunctionName = "Search",
+            Description = "Perform a search for content related to the specified query from a record collection.",
+            Parameters =
+            [
+                new KernelParameterMetadata("query") { Description = "What to search for.", IsRequired = true },
+                new KernelParameterMetadata("count")
+                    { Description = "The number of results to return.", IsRequired = false, DefaultValue = 1 },
+                new KernelParameterMetadata("skip")
+                    { Description = "The number of results to skip.", IsRequired = false, DefaultValue = 0 }
+            ]
+        };
+        
+        // Build a text search plugins with vector store search and add to the kernel
+        var searchPlugin = KernelPluginFactory.CreateFromFunctions("SearchPlugin", "Search a record collection",
+            [textSearch.CreateGetTextSearchResults(options)]);
         kernel.Plugins.Add(searchPlugin);
-
+        
         // Using JSON Schema for Structured Output
         var excutionSettings = new OpenAIPromptExecutionSettings
         {
@@ -97,7 +113,7 @@ internal sealed class QueryDocumentCommandHandler(
         var response = await kernel.InvokePromptAsync(
             promptTemplate: """
                             Please use this information to answer the question:
-                            {{#with (SearchPlugin-GetTextSearchResults query)}}  
+                            {{#with (SearchPlugin-Search query)}}  
                               {{#each this}}  
                                 Name: {{Name}}
                                 Value: {{Value}}
