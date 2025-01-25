@@ -25,6 +25,11 @@ public class ForgotPasswordModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
+    public void OnGet(string returnUrl)
+    {
+        Input = new InputModel { ReturnUrl = returnUrl };
+    }
+
     public async Task<IActionResult> OnPostAsync()
     {
         if (ModelState.IsValid)
@@ -32,8 +37,8 @@ public class ForgotPasswordModel : PageModel
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
-                // Don't reveal that the user does not exist or is not confirmed
-                return RedirectToPage("/Account/ForgotPasswordConfirmation/ForgotPasswordConfirmation");
+                return RedirectToPage("/Account/ForgotPasswordConfirmation/ForgotPasswordConfirmation", 
+                    new { returnUrl = Input.ReturnUrl });
             }
 
             // For more information on how to enable account confirmation and password reset please 
@@ -43,7 +48,7 @@ public class ForgotPasswordModel : PageModel
             var callbackUrl = Url.Page(
                 "/Account/ResetPassword/ResetPassword",
                 pageHandler: null,
-                values: new { code },
+                values: new { code, returnUrl = Input.ReturnUrl },
                 protocol: Request.Scheme);
 
             await _emailSender.SendEmailAsync(
@@ -51,7 +56,8 @@ public class ForgotPasswordModel : PageModel
                 "Reset Password",
                 $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            return RedirectToPage("/Account/ForgotPasswordConfirmation/ForgotPasswordConfirmation");
+            return RedirectToPage("/Account/ForgotPasswordConfirmation/ForgotPasswordConfirmation", 
+                new { returnUrl = Input.ReturnUrl });
         }
 
         return Page();

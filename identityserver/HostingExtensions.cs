@@ -31,6 +31,13 @@ internal static class HostingExtensions
             {
                 configuration.SignIn.RequireConfirmedEmail = true;
                 configuration.SignIn.RequireConfirmedAccount = true;
+                
+                configuration.User.RequireUniqueEmail = true;
+
+                configuration.Password.RequireNonAlphanumeric = false;
+                configuration.Password.RequireDigit = false;
+                configuration.Password.RequireUppercase = false;
+                configuration.Password.RequiredUniqueChars = 0;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();

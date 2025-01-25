@@ -37,3 +37,36 @@
 .grants-page .card label {
   font-weight: bold;
 }
+
+.input-group-text {
+  border-radius: 8px 0 0 8px;
+}
+
+.input-group .form-control {
+  border-radius: 0 8px 8px 0;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #4776E6, #8E54E9);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #3665d5, #7d43d8);
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.gap-20-custom {
+  gap: 20px;
+}

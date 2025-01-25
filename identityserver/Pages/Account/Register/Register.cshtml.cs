@@ -39,6 +39,34 @@ namespace identityserver.Pages.Account.Register
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // Kiểm tra xem email đã tồn tại chưa
+                var existingUser = await userManager.FindByEmailAsync(Input.Email);
+                if (existingUser != null)
+                {
+                    // Kiểm tra xem user có password hay không
+                    var hasPassword = await userManager.HasPasswordAsync(existingUser);
+                    if (!hasPassword)
+                    {
+                        // Nếu chưa có password (user được tạo từ external login), thêm password
+                        var addPasswordResult = await userManager.AddPasswordAsync(existingUser, Input.Password);
+                        if (addPasswordResult.Succeeded)
+                        {
+                            logger.LogInformation("Password added to existing account.");
+                            await signInManager.SignInAsync(existingUser, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
+                        foreach (var error in addPasswordResult.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return Page();
+                    }
+                    // Nếu đã có password, báo lỗi email đã tồn tại
+                    ModelState.AddModelError(string.Empty, "Email already exists.");
+                    return Page();
+                }
+
+                // Nếu email chưa tồn tại, tạo user mới như bình thường
                 var user = new ApplicationUser() { UserName = Input.Email, Email = Input.Email };
                 var result = await userManager.CreateAsync(user, Input.Password);
                 await userManager.AddClaimsAsync(user, [
@@ -47,6 +75,7 @@ namespace identityserver.Pages.Account.Register
                     new Claim(JwtClaimTypes.FamilyName, user.UserName),
                     new Claim(JwtClaimTypes.WebSite, "https://www.example.com"),
                 ]);
+                
 
                 if (result.Succeeded)
                 {

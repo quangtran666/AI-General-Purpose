@@ -101,22 +101,35 @@ public class Callback(
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1851:Possible multiple enumerations of 'IEnumerable' collection", Justification = "<Pending>")]
     private async Task<ApplicationUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
     {
-        var sub = Guid.NewGuid().ToString();
-            
-        var user = new ApplicationUser
-        {
-            Id = sub,
-            UserName = sub, // don't need a username, since the user will be using an external provider to login
-        };
-
-        // email
+        // Tìm email từ claims
         var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
                     claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+
+        ApplicationUser user;
+        
         if (email != null)
         {
-            user.Email = email;
+            // Kiểm tra xem đã có user với email này chưa
+            user = await userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                // Nếu user đã tồn tại, thêm external login mới
+                var result = await userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
+                if (!result.Succeeded) throw new InvalidOperationException(result.Errors.First().Description);
+                return user;
+            }
         }
-            
+
+        // Nếu không tìm thấy user với email này, tạo user mới
+        var sub = Guid.NewGuid().ToString();
+        user = new ApplicationUser
+        {
+            Id = sub,
+            UserName = sub,
+            Email = email,
+            EmailConfirmed = true
+        };
+
         // create a list of claims that we want to transfer into our store
         var filtered = new List<Claim>();
 

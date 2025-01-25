@@ -22,20 +22,19 @@ public class ResetPasswordModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
-    public IActionResult OnGet(string code = null)
+    public IActionResult OnGet(string code = null, string returnUrl = null)
     {
         if (code == null)
         {
             return BadRequest("A code must be supplied for password reset.");
         }
-        else
+
+        Input = new InputModel
         {
-            Input = new InputModel
-            {
-                Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-            };
-            return Page();
-        }
+            Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)),
+            ReturnUrl = returnUrl
+        };
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -48,14 +47,15 @@ public class ResetPasswordModel : PageModel
         var user = await _userManager.FindByEmailAsync(Input.Email);
         if (user == null)
         {
-            // Don't reveal that the user does not exist
-            return RedirectToPage("/Account/ResetPasswordConfirmation/ResetPasswordConfirmation");
+            return RedirectToPage("/Account/ResetPasswordConfirmation/ResetPasswordConfirmation", 
+                new { returnUrl = Input.ReturnUrl });
         }
 
         var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
         if (result.Succeeded)
         {
-            return RedirectToPage("/Account/ResetPasswordConfirmation/ResetPasswordConfirmation");
+            return RedirectToPage("/Account/ResetPasswordConfirmation/ResetPasswordConfirmation", 
+                new { returnUrl = Input.ReturnUrl });
         }
 
         foreach (var error in result.Errors)
