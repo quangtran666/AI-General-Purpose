@@ -49,6 +49,7 @@ const PDFViewer = memo(function PDFViewer({documentId, setPageRef, presignedUrl}
                     <div
                         ref={el => setPageRef(index, el)}
                         key={`page_${index + 1}`}
+                        data-page-number={index}
                     >
                         <Page
                             pageNumber={index + 1}

@@ -20,7 +20,7 @@ function SpecificDocumentChatPage({params}: { params: Promise<{ documentId: stri
     const {data, isLoading} = useGetDocumentById(Number(documentId));
     const {scrollToPage, setPageRef} = usePDFNavigation(documentId);
     const {anchorEndMessages} = useMessagesProcessAndScroll(documentId, isLoading, data);
-
+    
     return (
         <div className="flex">
             <section className="w-1/2 border-r-1 border-r-main_border_color h-svh flex flex-col">

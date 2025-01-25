@@ -1,9 +1,11 @@
-﻿import {useCallback, useState} from "react";
+﻿import {useCallback, useState, useEffect} from "react";
 import {usePDFStore} from "@/stores/pdfstore";
+import {usePageInView} from './usePageInView';
 
 export const usePDFNavigation = (documentId: string) => {
     const [pageRefs, setPageRefs] = useState<(HTMLDivElement | null)[]>([]);
     const {setCurrentPage, getPdfNumPages} = usePDFStore();
+    const { createIntersectionObserver } = usePageInView(documentId);
     
     const setPageRef = useCallback(
         (index: number, ref: HTMLDivElement | null) => {
@@ -15,6 +17,13 @@ export const usePDFNavigation = (documentId: string) => {
         },
         []
     );
+
+    useEffect(() => {
+        if (pageRefs.length > 0) {
+            const observer = createIntersectionObserver(pageRefs);
+            return () => observer.disconnect();
+        }
+    }, [pageRefs]);
 
     // Scroll to certain page then set the current page
     const scrollToPage = useCallback(
