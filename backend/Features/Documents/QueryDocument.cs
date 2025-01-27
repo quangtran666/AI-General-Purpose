@@ -1,26 +1,27 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using backend.Common;
 using backend.Common.Models;
+using backend.Infrastructure.Services.DB.Document;
+using backend.Infrastructure.Services.DB.Subscription;
+using backend.Infrastructure.Services.RAG;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.VectorData;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Microsoft.SemanticKernel.Data;
 using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
 using shared.Data;
 using shared.Enums;
-using shared.Models;
-using shared.VectorModels;
+using shared.Exceptions;
 
 namespace backend.Features.Documents;
 
 public sealed class QueryDocumentController : ApiControllerBase
-{ 
+{
     [Authorize]
     [HttpPost("/api/documents/{documentId:int}/query")]
     public async Task<ActionResult<string>> Query([FromRoute] int documentId, [FromBody] QueryDocumentRequest request,
@@ -50,58 +51,62 @@ internal sealed class QueryDocumentCommandHandler(
     ApplicationDbContext applicationDbContext,
     Kernel kernel,
     IVectorStore vectorStore,
+    IHttpContextAccessor httpContextAccessor,
 #pragma warning disable SKEXP0001
-    ITextEmbeddingGenerationService textEmbeddingGenerationService
+    ITextEmbeddingGenerationService textEmbeddingGenerationService,
 #pragma warning restore SKEXP0001
+    IDocumentService documentService,
+    ISubscriptionService subscriptionService,
+    IVectorSearchService vectorSearchService
 ) : IRequestHandler<QueryDocumentCommand, QueryDocumentResponse>
 {
-    // Todo: Refactor this method
     public async Task<QueryDocumentResponse> Handle(QueryDocumentCommand request, CancellationToken cancellationToken)
     {
-        // Retrive the document from the database
-        var document = await applicationDbContext.Documents
-            .Include(x => x.Messages)
-            .Where(x => x.Id == request.DocumentId)
-            .FirstOrDefaultAsync(cancellationToken);
+        var userIdentifier = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        if (document is null) return null;
+        // Validate the user subscription
+        if (!await subscriptionService.ValidateUserSubscriptionAsync(userIdentifier, cancellationToken))
+            throw new Exception("User has no remaining usage.");
+
+        // Retrive the document from the database
+        var document = await documentService.GetDocumentByIdAsync(request.DocumentId, cancellationToken);
+        if (document is null)
+            throw new DocumentNotFoundException(request.DocumentId);
 
         await using var transaction = await applicationDbContext.Database.BeginTransactionAsync(cancellationToken);
-        // Save the user query
-        document.Messages.Add(new Message
+        try
         {
-            Content = JsonSerializer.Serialize(request.Query),
-            Role = MessageRole.User
-        });
+            // Save the user query
+            documentService.SaveDocument(document, request.Query, MessageRole.User);
+            
+            // Create Plugin and add to the kernel
+            var searchPlugin = await vectorSearchService.CreateSearchPlugins(document.VectorCollectionName, vectorStore,
+                textEmbeddingGenerationService, cancellationToken);
+            kernel.Plugins.Add(searchPlugin);
+            
+            // Get the response 
+            var response = await GetKernelResponse(request.Query, cancellationToken);
+            var result = JsonSerializer.Deserialize<QueryDocumentResponse>(response.ToString());
+            
+            // Save the response
+            documentService.SaveDocument(document, response.ToString(), MessageRole.AI);
+            // Decrement the user subscription
+            subscriptionService.DecrementUserSubscriptionAsync(userIdentifier, cancellationToken);
+            
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            
+            return result;
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
+    }
 
-        // Setup vectorCollection, textSearch for the vectorCollection
-        var vectorRecordCollection = vectorStore.GetCollection<Guid, TextSnippet>(document.VectorCollectionName);
-#pragma warning disable SKEXP0001
-        var textSearch = new VectorStoreTextSearch<TextSnippet>(
-            vectorRecordCollection,
-            textEmbeddingGenerationService);
-#pragma warning restore SKEXP0001
-        
-        // Create options to describe the function i want to register
-        var options = new KernelFunctionFromMethodOptions
-        {
-            FunctionName = "Search",
-            Description = "Perform a search for content related to the specified query from a record collection.",
-            Parameters =
-            [
-                new KernelParameterMetadata("query") { Description = "What to search for.", IsRequired = true },
-                new KernelParameterMetadata("count")
-                    { Description = "The number of results to return.", IsRequired = false, DefaultValue = 1 },
-                new KernelParameterMetadata("skip")
-                    { Description = "The number of results to skip.", IsRequired = false, DefaultValue = 0 }
-            ]
-        };
-        
-        // Build a text search plugins with vector store search and add to the kernel
-        var searchPlugin = KernelPluginFactory.CreateFromFunctions("SearchPlugin", "Search a record collection",
-            [textSearch.CreateGetTextSearchResults(options)]);
-        kernel.Plugins.Add(searchPlugin);
-        
+    private async Task<FunctionResult> GetKernelResponse(string query, CancellationToken cancellationToken)
+    {
         // Using JSON Schema for Structured Output
         var excutionSettings = new OpenAIPromptExecutionSettings
         {
@@ -109,7 +114,7 @@ internal sealed class QueryDocumentCommandHandler(
             ResponseFormat = typeof(QueryDocumentResponse)
 #pragma warning restore SKEXP0010
         };
-        
+
         var response = await kernel.InvokePromptAsync(
             promptTemplate: """
                             Please use this information to answer the question:
@@ -128,23 +133,12 @@ internal sealed class QueryDocumentCommandHandler(
                             """,
             arguments: new KernelArguments(excutionSettings)
             {
-                { "query", request.Query }
+                { "query", query }
             },
             templateFormat: "handlebars",
             promptTemplateFactory: new HandlebarsPromptTemplateFactory(),
             cancellationToken: cancellationToken);
-
-        // Deserialize the response
-        var result = JsonSerializer.Deserialize<QueryDocumentResponse>(response.ToString());
-        // Save the response
-        document.Messages.Add(new Message
-        {
-            Content = response.ToString(),
-            Role = MessageRole.AI
-        });
-        await applicationDbContext.SaveChangesAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
         
-        return result;
+        return response;
     }
 }

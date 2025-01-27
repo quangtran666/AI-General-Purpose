@@ -3,6 +3,8 @@ using Amazon.S3;
 using backend.Common.Behaviours;
 using backend.Infrastructure.Options;
 using backend.Infrastructure.Services;
+using backend.Infrastructure.Services.DB.Document;
+using backend.Infrastructure.Services.DB.Subscription;
 using backend.Infrastructure.Services.RAG;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,10 @@ public static class DependencyInjection
         services.AddSingleton<IDataLoader, DataLoader>();
         services.AddSingleton(applicationConfig);
 
+        services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
+        services.AddScoped<IVectorSearchService, VectorSearchService>();
+        
         return services;
     }
 

@@ -42,10 +42,6 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
             .ValueGeneratedNever()
             .HasColumnName("end_date");
         
-        builder.Property(x => x.UsageLimit)
-            .IsRequired()
-            .HasColumnName("usage_limit");
-        
         builder.Property(x => x.RemainingUsage)
             .IsRequired()
             .HasColumnName("remaining_usage");

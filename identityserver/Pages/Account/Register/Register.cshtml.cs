@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using shared.Enums;
 using shared.Models;
 
 namespace identityserver.Pages.Account.Register
@@ -67,18 +68,32 @@ namespace identityserver.Pages.Account.Register
                 }
 
                 // Nếu email chưa tồn tại, tạo user mới như bình thường
-                var user = new ApplicationUser() { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
                 var result = await userManager.CreateAsync(user, Input.Password);
-                await userManager.AddClaimsAsync(user, [
-                    new Claim(JwtClaimTypes.Name, user.UserName),
-                    new Claim(JwtClaimTypes.GivenName, user.UserName),
-                    new Claim(JwtClaimTypes.FamilyName, user.UserName),
-                    new Claim(JwtClaimTypes.WebSite, "https://www.example.com"),
-                ]);
                 
-
                 if (result.Succeeded)
                 {
+                    // Thêm claims cho user
+                    await userManager.AddClaimsAsync(user, [
+                        new Claim(JwtClaimTypes.Name, user.UserName),
+                        new Claim(JwtClaimTypes.GivenName, user.UserName),
+                        new Claim(JwtClaimTypes.FamilyName, user.UserName),
+                        new Claim(JwtClaimTypes.WebSite, "https://www.example.com"),
+                    ]);
+                    
+                    // Thêm subscription cho user
+                    var subscription = new Subscription
+                    {
+                        UserId = user.Id,
+                        SubscriptionType = SubscriptionType.Free,
+                        StartDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
+                        EndDate = DateTime.SpecifyKind(DateTime.UtcNow.AddYears(100), DateTimeKind.Unspecified),
+                        CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
+                        RemainingUsage = 10,
+                    };
+                    user.Subscription = subscription;
+                    await userManager.UpdateAsync(user);
+                    
                     logger.LogInformation("User created a new account with password.");
 
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
