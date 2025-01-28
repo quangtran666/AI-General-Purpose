@@ -8,16 +8,23 @@ import {Button} from "@/components/ui/button";
 import {useGetUserProfile} from "@/services/user/useGetUserProfile";
 import {Progress} from "@/components/ui/progress";
 import {formatDate} from "@/lib/date.utils";
+import {useCreateCheckoutSession} from "@/services/payment/useCreateCheckoutSession";
+import {LoaderCircle} from "lucide-react";
 
 function UserSettings() {
     const { userInfo, isLoading } = useGetUserProfile();
+    const { createCheckoutSession, isLoading: createCheckoutSessionLoading } = useCreateCheckoutSession();
 
     const getUserAbbreviation = () => {
         return userInfo?.fullName?.split(" ").map(c => c[0]).join("");
     }
     
+    const handleUpgrade = async () => {
+        await createCheckoutSession({productId: "price_1Qln0nJ1wcAosgWJz0jKFHd9"});
+    }
+    
     return (
-        !isLoading && (
+        !isLoading && userInfo && (
             <Dialog>
                 <DialogTrigger asChild>
                     <button className="flex items-center gap-4 mt-2 w-full">
@@ -55,6 +62,19 @@ function UserSettings() {
                                 <span>{formatDate(userInfo?.subscription.endDate!)}</span>
                             </div>
                         </div>
+                        { userInfo?.subscription?.subscriptionType === "Free" ? 
+                            <Button 
+                                onClick={handleUpgrade}
+                                className="text-white w-full"
+                            >
+                                { createCheckoutSessionLoading ? <LoaderCircle className="animate-spin"/> : "Upgrade to premium to get more features" }
+                            </Button> :
+                            <Button
+                                className="text-white w-full"
+                            >
+                                Enjoy your premium subscription
+                            </Button>                    
+                        }
                     </div>
                 </DialogContent>
             </Dialog>

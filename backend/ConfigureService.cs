@@ -6,6 +6,7 @@ using backend.Infrastructure.Services;
 using backend.Infrastructure.Services.DB.Document;
 using backend.Infrastructure.Services.DB.Subscription;
 using backend.Infrastructure.Services.RAG;
+using backend.Infrastructure.Services.Stripe;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -61,6 +62,8 @@ public static class DependencyInjection
             return new AmazonS3Client(config);
         });
         services.AddSingleton<S3Services>();
+
+        services.AddScoped<StripeService>();
 
         var kernel = services.AddKernel();
         kernel.AddOpenAIChatCompletion(

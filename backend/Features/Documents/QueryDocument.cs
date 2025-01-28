@@ -91,7 +91,7 @@ internal sealed class QueryDocumentCommandHandler(
             // Save the response
             documentService.SaveDocument(document, response.ToString(), MessageRole.AI);
             // Decrement the user subscription
-            subscriptionService.DecrementUserSubscriptionAsync(userIdentifier, cancellationToken);
+            await subscriptionService.DecrementUsageUserSubscriptionAsync(userIdentifier, cancellationToken);
             
             await applicationDbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);

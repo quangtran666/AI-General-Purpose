@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Text.Json.Serialization;
 using backend.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +25,12 @@ public class GetUserProfileController : ApiControllerBase
     
     public record UserProfileDto(string Email, string FullName, SubscriptionDto Subscription);
     
-    public record SubscriptionDto(SubscriptionType SubscriptionType, DateTime StartDate, DateTime EndDate, int RemainingUsage);
+    public record SubscriptionDto(
+        [property: JsonConverter(typeof(JsonStringEnumConverter))]
+        SubscriptionType SubscriptionType, 
+        DateTime StartDate, 
+        DateTime EndDate, 
+        int RemainingUsage);
     
     internal class GetUserProfileQueryHandler(
         ApplicationDbContext applicationDbContext,

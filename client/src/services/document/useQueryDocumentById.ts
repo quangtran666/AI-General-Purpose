@@ -1,5 +1,5 @@
 ﻿import {useSession} from "next-auth/react";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {documentService, QueryDocumentParams} from "@/services/document/document-service";
 import {setAuth} from "@/lib/axios";
 import {useToast} from "@/hooks/use-toast";
@@ -7,14 +7,15 @@ import {useToast} from "@/hooks/use-toast";
 export const useQueryDocumentById = (documentId: number) => {
     const {data: session} = useSession();
     const {toast} = useToast();
+    const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: async ({query}: QueryDocumentParams) => {
             setAuth(session?.accessToken ?? "");
             return await documentService.queryDocumentById(query, documentId);
         },
-        onSuccess: (data) => {
-            console.log(data);
+        onSuccess: async (data) => {
+            await queryClient.invalidateQueries({ queryKey: ["user-profile"]});
         },
         onError: (error) => {
             toast({
