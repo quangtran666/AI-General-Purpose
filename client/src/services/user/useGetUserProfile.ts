@@ -13,7 +13,8 @@ export const useGetUserProfile = () => {
             return await userService.getUserProfile()
         },
         staleTime: Infinity,
-        enabled: status === "authenticated"
+        enabled: status === "authenticated",
+        refetchOnMount: true
     })
     
     return {
