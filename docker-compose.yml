@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    container_name: backend
     ports:
-      - "5001:8080"
       - "5051:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -14,6 +14,8 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_CERTIFICATE_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_CERTIFICATE_PASSWORD=${ASPNETCORE_CERTIFICATE_PASSWORD}
+      - JwtSettings__Authority=https://localhost:5052
     depends_on:
       - identityserver
     volumes:
@@ -23,6 +25,7 @@ services:
     build:
       context: .
       dockerfile: identityserver/Dockerfile
+    container_name: identityserver
     ports:
       - "5052:8081"
     environment:
@@ -31,5 +34,10 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_CERTIFICATE_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_CERTIFICATE_PASSWORD=${ASPNETCORE_CERTIFICATE_PASSWORD}
     volumes:
       - ~/.aspnet/https:/https:ro
+      - keys:/home/app/.aspnet/DataProtection-Keys
+      
+volumes:
+  keys:

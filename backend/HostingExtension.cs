@@ -1,13 +1,8 @@
-﻿using Amazon;
-using Amazon.S3;
-using backend.Infrastructure.Options;
-using backend.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using backend.Infrastructure.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using shared.Data;
 
 namespace backend;
 
@@ -19,19 +14,24 @@ public static class HostingExtension
         {
             configuration.ReadFrom.Configuration(context.Configuration);
         });
-
+        
         app.Services.AddAuthentication()
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://localhost:5002";
+                options.Authority = app.Configuration["JwtSettings:Authority"];
+                options.MetadataAddress = app.Configuration["JwtSettings:Authority"] + "/.well-known/openid-configuration";
+                options.RequireHttpsMetadata = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudiences = ["backendapi"],
+                    ValidAudiences = ["backendapi"],                
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     RequireExpirationTime = true,
-                    ValidTypes = ["at+jwt"]
+                    ValidTypes = ["at+jwt"],
+                    SignatureValidator = (token, parameters) => new JsonWebToken(token),
+                    ValidateIssuer = true,
+                    ValidIssuers = [app.Configuration["JwtSettings:Authority"]],
                 };
             });
 

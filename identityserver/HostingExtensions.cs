@@ -1,7 +1,8 @@
+using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer;
-using identityserver.Data;
 using identityserver.ProfileServices;
 using identityserver.Services.Mails;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,13 @@ internal static class HostingExtensions
 
         builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection(AuthMessageSenderOptions.MailTrap));
         builder.Services.AddTransient<IEmailSender, MailTrapSender>();
+        
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo("/home/app/.aspnet/DataProtection-Keys"))
+            .ProtectKeysWithCertificate(new X509Certificate2(
+                "/https/aspnetapp.pfx",
+                builder.Configuration["ASPNETCORE_CERTIFICATE_PASSWORD"]))
+            .SetApplicationName("CHAT_PDF");
         
         var chatPPFDBConnectionString = builder.Configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
         var identityServerDBConnectionString = builder.Configuration.GetConnectionString("IdentityServerDBConnectionString");
