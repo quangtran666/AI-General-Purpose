@@ -1,9 +1,19 @@
-﻿import {Card, CardHeader, CardTitle, CardContent, CardFooter} from "@/components/ui/card";
+﻿"use client"
+
+import {Card, CardHeader, CardTitle, CardContent, CardFooter} from "@/components/ui/card";
 import {CheckCircle} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {useQueryClient} from "@tanstack/react-query";
+import {useEffect} from "react";
 
 function SuccessPage() {
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    }, [queryClient]);
+    
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <Card className="w-full max-w-md text-center bg-leftnav">

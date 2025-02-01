@@ -41,7 +41,7 @@ function LeftNav() {
             </section>
             <section>
                 <LanguagesSelection/>
-                <UserSettings/>
+                {status === "authenticated" && <UserSettings/>}
             </section>
         </div>
     );

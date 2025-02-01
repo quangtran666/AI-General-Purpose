@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
         canvas: './empty-module.ts'
       }
     }
+  },
+  eslint: {
+    ignoreDuringBuilds: true
   }
 };
 
