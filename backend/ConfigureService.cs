@@ -1,4 +1,5 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using backend.Common.Behaviours;
 using backend.Infrastructure.Options;
@@ -53,13 +54,9 @@ public static class DependencyInjection
 
         services.AddSingleton<IAmazonS3>(sp =>
         {
-            var config = new AmazonS3Config
-            {
-                Profile = new Profile(applicationConfig.S3Settings.Profile),
-                RegionEndpoint = RegionEndpoint.GetBySystemName(applicationConfig.S3Settings.Region)
-            };
+            var awsCredentials = new BasicAWSCredentials(applicationConfig.S3Settings.AccessKey, applicationConfig.S3Settings.SecretKey);
 
-            return new AmazonS3Client(config);
+            return new AmazonS3Client(awsCredentials, RegionEndpoint.GetBySystemName(applicationConfig.S3Settings.Region));
         });
         services.AddSingleton<S3Services>();
 

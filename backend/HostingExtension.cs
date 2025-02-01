@@ -1,4 +1,6 @@
-﻿using backend.Infrastructure.Options;
+﻿using System.Net;
+using backend.Infrastructure.Options;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -37,6 +39,15 @@ public static class HostingExtension
 
         app.Services.AddAuthorization();
 
+        app.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            // options.KnownProxies.Add(IPAddress.Parse(app.Configuration["Proxies:KnownProxies"]));
+            
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        }); 
+
         app.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         app.Services.AddEndpointsApiExplorer();
@@ -67,7 +78,8 @@ public static class HostingExtension
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        
+        app.UseForwardedHeaders();
         app.UseSerilogRequestLogging();
         app.UseCors();
         app.UseHttpsRedirection();

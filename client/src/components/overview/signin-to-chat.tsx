@@ -19,7 +19,7 @@ function SignInToChat() {
           Sign in for free to save your chat history
         </p>
         <Button 
-            onClick={() => signIn() } 
+            onClick={() => signIn("identityserver") } 
             className="text-neutral-200"
         >
             Sign In

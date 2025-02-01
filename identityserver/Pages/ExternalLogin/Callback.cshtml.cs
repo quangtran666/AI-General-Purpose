@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using shared.Enums;
 using shared.Models;
 
 namespace identityserver.Pages.ExternalLogin;
@@ -125,9 +126,17 @@ public class Callback(
         user = new ApplicationUser
         {
             Id = sub,
-            UserName = sub,
+            UserName = email,
             Email = email,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            Subscription = new Subscription
+            {
+                SubscriptionType = SubscriptionType.Free,
+                RemainingUsage = 10,
+                StartDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
+                EndDate = DateTime.SpecifyKind(DateTime.UtcNow.AddYears(99), DateTimeKind.Unspecified),
+                CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified)
+            }
         };
 
         // create a list of claims that we want to transfer into our store

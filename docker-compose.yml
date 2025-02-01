@@ -16,6 +16,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_CERTIFICATE_PASSWORD=${ASPNETCORE_CERTIFICATE_PASSWORD}
       - JwtSettings__Authority=https://localhost:5052
+      - Proxies__KnownProxies=${Proxies__KnownProxies}
     depends_on:
       - identityserver
     volumes:
@@ -35,6 +36,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_CERTIFICATE_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_CERTIFICATE_PASSWORD=${ASPNETCORE_CERTIFICATE_PASSWORD}
+      - Proxies__KnownProxies=${Proxies__KnownProxies}
     volumes:
       - ~/.aspnet/https:/https:ro
       - keys:/home/app/.aspnet/DataProtection-Keys

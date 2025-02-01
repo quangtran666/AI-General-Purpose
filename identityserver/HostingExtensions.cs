@@ -1,8 +1,10 @@
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer;
 using identityserver.ProfileServices;
 using identityserver.Services.Mails;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,20 +20,35 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
-        builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection(AuthMessageSenderOptions.MailTrap));
+        builder.Services.Configure<AuthMessageSenderOptions>(
+            builder.Configuration.GetSection(AuthMessageSenderOptions.MailTrap));
         builder.Services.AddTransient<IEmailSender, MailTrapSender>();
-        
+
+        var certificatePath = "/https/aspnetapp.pfx";
+        var certificatePassword = builder.Configuration["ASPNETCORE_CERTIFICATE_PASSWORD"];
+
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/home/app/.aspnet/DataProtection-Keys"))
             .ProtectKeysWithCertificate(new X509Certificate2(
-                "/https/aspnetapp.pfx",
-                builder.Configuration["ASPNETCORE_CERTIFICATE_PASSWORD"]))
+                certificatePath,
+                certificatePassword
+            ))
             .SetApplicationName("CHAT_PDF");
-        
+
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            // options.KnownProxies.Add(IPAddress.Parse(builder.Configuration["Proxies:KnownProxies"]));
+            
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+
         var chatPPFDBConnectionString = builder.Configuration.GetConnectionString("ChatPDFIdentityDBConnectionString");
-        var identityServerDBConnectionString = builder.Configuration.GetConnectionString("IdentityServerDBConnectionString");
+        var identityServerDBConnectionString =
+            builder.Configuration.GetConnectionString("IdentityServerDBConnectionString");
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
-        
+
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(chatPPFDBConnectionString));
 
@@ -39,7 +56,7 @@ internal static class HostingExtensions
             {
                 configuration.SignIn.RequireConfirmedEmail = true;
                 configuration.SignIn.RequireConfirmedAccount = true;
-                
+
                 configuration.User.RequireUniqueEmail = true;
 
                 configuration.Password.RequireNonAlphanumeric = false;
@@ -68,12 +85,12 @@ internal static class HostingExtensions
             })
             .AddOperationalStore(options =>
             {
-                options.ConfigureDbContext = b => b.UseNpgsql(identityServerDBConnectionString, 
+                options.ConfigureDbContext = b => b.UseNpgsql(identityServerDBConnectionString,
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
             .AddAspNetIdentity<ApplicationUser>()
             .AddProfileService<CustomProfileService>();
-        
+
         builder.Services.AddAuthentication()
             .AddGoogle(options =>
             {
@@ -92,11 +109,12 @@ internal static class HostingExtensions
 
         return builder.Build();
     }
-    
+
     public static WebApplication ConfigurePipeline(this WebApplication app)
-    { 
+    {
+        app.UseForwardedHeaders();
         app.UseSerilogRequestLogging();
-    
+
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -106,7 +124,7 @@ internal static class HostingExtensions
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
-        
+
         app.MapRazorPages()
             .RequireAuthorization();
 

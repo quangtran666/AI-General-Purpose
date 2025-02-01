@@ -1,12 +1,14 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+# Tạo thư mục với quyền root
+RUN mkdir -p /https && \
+    chown -R app:app /https && \
+    mkdir -p /home/app/.aspnet/DataProtection-Keys && \
+    chown -R app:app /home/app/.aspnet/DataProtection-Keys
+
 USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
-
-# Create thư mục cho data protection keys
-RUN mkdir -p /home/app/.aspnet/DataProtection-Keys && \
-    chown -R app:app /home/app/.aspnet/DataProtection-Keys
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
