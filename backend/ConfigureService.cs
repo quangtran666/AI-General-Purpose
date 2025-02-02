@@ -24,7 +24,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, ApplicationConfig applicationConfig)
     {
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
 
         services.AddMediatR(options =>
         {

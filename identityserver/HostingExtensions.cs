@@ -24,16 +24,16 @@ internal static class HostingExtensions
             builder.Configuration.GetSection(AuthMessageSenderOptions.MailTrap));
         builder.Services.AddTransient<IEmailSender, MailTrapSender>();
 
-        var certificatePath = "/https/aspnetapp.pfx";
-        var certificatePassword = builder.Configuration["ASPNETCORE_CERTIFICATE_PASSWORD"];
-
-        builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/home/app/.aspnet/DataProtection-Keys"))
-            .ProtectKeysWithCertificate(new X509Certificate2(
-                certificatePath,
-                certificatePassword
-            ))
-            .SetApplicationName("CHAT_PDF");
+        // var certificatePath = "/https/aspnetapp.pfx";
+        // var certificatePassword = builder.Configuration["ASPNETCORE_CERTIFICATE_PASSWORD"];
+        //
+        // builder.Services.AddDataProtection()
+        //     .PersistKeysToFileSystem(new DirectoryInfo("/home/app/.aspnet/DataProtection-Keys"))
+        //     .ProtectKeysWithCertificate(new X509Certificate2(
+        //         certificatePath,
+        //         certificatePassword
+        //     ))
+        //     .SetApplicationName("CHAT_PDF");
 
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
         {

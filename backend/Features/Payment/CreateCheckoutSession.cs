@@ -19,13 +19,14 @@ public class CreateCheckoutSessionController : ApiControllerBase
     
     internal class CreateCheckoutSessionCommandHandler(
         StripeService stripeService,
-        IHttpContextAccessor httpContextAccessor) 
+        IHttpContextAccessor httpContextAccessor,
+        IConfiguration configuration) 
         : IRequestHandler<CreateCheckoutSessionCommand, string>
     {
         public async Task<string> Handle(CreateCheckoutSessionCommand request, CancellationToken cancellationToken)
         {
-            var successUrl = $"http://localhost:3000/checkout/success";
-            var cancelUrl = $"http://localhost:3000/checkout/cancel";
+            var successUrl = configuration["Payments:Stripe:SuccessUrl"];
+            var cancelUrl = configuration["Payments:Stripe:CancelUrl"];
             
             return await stripeService.CreateCheckoutSessionAsync(request.productId, successUrl, cancelUrl, cancellationToken);
         }

@@ -28,6 +28,9 @@ public record CreateDocumentCommand(IFormFile File, int? FolderId) : IRequest<in
 
 internal sealed class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCommand>
 {
+    private const int MaxFileSizeInMb = 6;
+    private const int MaxFileSizeInBytes = MaxFileSizeInMb * 1024 * 1024;
+
     public CreateDocumentCommandValidator()
     {
         RuleFor(x => x.File)
@@ -42,6 +45,11 @@ internal sealed class CreateDocumentCommandValidator : AbstractValidator<CreateD
                 if (!Path.GetExtension(file.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     context.AddFailure("File", "File must be a PDF");
+                }
+
+                if (file.Length > MaxFileSizeInBytes)
+                {
+                    context.AddFailure("File", $"File size must be less than {MaxFileSizeInMb}MB");
                 }
             });
     }
@@ -59,7 +67,7 @@ internal sealed class CreateDocumentCommandHandler(
         var storageKey = $"pdfs/{Guid.NewGuid()}";
         var fileBtyes = await FileHelper.ReadStreamToByteArrayAysnc(request.File.OpenReadStream(), cancellationToken);
         await s3Services.UploadFileAsync(new MemoryStream(fileBtyes), storageKey, cancellationToken);
-
+        
         var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
                      ?? throw new InvalidOperationException("UserName Identifier not found");
         var collectionName = $"pdfs-{Guid.NewGuid()}-{userId}-{request.File.FileName}";
@@ -73,11 +81,11 @@ internal sealed class CreateDocumentCommandHandler(
         };
         applicationDbContext.Documents.Add(document);
         await applicationDbContext.SaveChangesAsync(cancellationToken);
-
+        
         await dataLoader.LoadPdf(collectionName, fileBtyes, applicationConfig.RagConfig.DataLoadingBatchSize,
             applicationConfig.RagConfig.DataLoadingBetweenBatchDelayInMs, cancellationToken);
-
-
+        
+        
         return document.Id;
     }
 }

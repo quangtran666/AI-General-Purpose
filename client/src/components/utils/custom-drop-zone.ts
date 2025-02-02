@@ -3,10 +3,11 @@ import {DropEvent, FileRejection, useDropzone} from "react-dropzone";
 
 interface CustomDropZoneProps {
     maxFiles: number,
+    maxSize?: number,
     onDrop: (acceptedFiles: File[], fileRejections: FileRejection[], event: DropEvent) => void
 } 
 
-function useCustomDropZone ({maxFiles, onDrop} : CustomDropZoneProps) {
+function useCustomDropZone ({maxFiles, maxSize = 5 * 1024 * 1024, onDrop} : CustomDropZoneProps) {
     const {getRootProps, getInputProps, isDragActive} = useDropzone(
         {
             onDrop,
@@ -14,6 +15,7 @@ function useCustomDropZone ({maxFiles, onDrop} : CustomDropZoneProps) {
                 "application/pdf": [".pdf"],
             },
             maxFiles: maxFiles,
+            maxSize: maxSize,
         });
     
     return {

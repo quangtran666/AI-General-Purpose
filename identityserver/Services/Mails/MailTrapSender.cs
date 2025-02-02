@@ -25,7 +25,7 @@ public class MailTrapSender(ILogger<MailTrapSender> logger, IOptions<AuthMessage
         try
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("QuangIdentityserver", "tranducquang.apolos@gmail.com"));
+            message.From.Add(new MailboxAddress("QuangIdentityserver", "hello@chatpdfsemantic.online"));
             message.To.Add(new MailboxAddress(email, email));
             message.Subject = subject;
 
@@ -36,7 +36,7 @@ public class MailTrapSender(ILogger<MailTrapSender> logger, IOptions<AuthMessage
             message.Body = bodyBuilder.ToMessageBody();
 
             using var client = new SmtpClient();
-            await client.ConnectAsync("smtp.mailtrap.io", 2525, SecureSocketOptions.StartTls);
+            await client.ConnectAsync("live.smtp.mailtrap.io", 587, SecureSocketOptions.StartTls);
             await client.AuthenticateAsync(options.Value.SmtpUsername, options.Value.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
@@ -48,4 +48,5 @@ public class MailTrapSender(ILogger<MailTrapSender> logger, IOptions<AuthMessage
             logger.LogError(ex, "An error occurred while sending the email");
         }
     }
+
 }
