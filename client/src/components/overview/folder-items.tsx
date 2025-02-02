@@ -14,7 +14,7 @@ interface FolderItemsProps {
 
 function FolderItems({folderGroup}: FolderItemsProps) {
     const {handleDrop, isUploading} = useDocumentUpload(folderGroup.folderId);
-    const {getRootProps, getInputProps} = useCustomDropZone({maxFiles: 1, onDrop: handleDrop});
+    const {getRootProps, getInputProps} = useCustomDropZone({maxFiles: 1, maxSize: Number(process.env.NEXT_PUBLIC_FILE_SIZE_LIMIT!), onDrop: handleDrop});
     const {documentId} = useParams();
     const router = useRouter();
     

@@ -10,6 +10,8 @@ import Spinner from "@/components/small-components/spinner";
 import {usePDFNavigation} from "@/app/chat/documents/[documentId]/_hooks/usePDFNavigation";
 import {useMessagesProcessAndScroll} from "@/app/chat/documents/[documentId]/_hooks/useMessagesProcessAndScroll";
 import PdfOperations from "@/app/chat/documents/[documentId]/_components/pdf-operations";
+import {useSidebarStore} from "@/stores/sidebarstore";
+import ShowSidebarButton from "@/app/chat/documents/[documentId]/_components/show-sidebar-button";
 
 const PDFViewer = dynamic(() => import("./_components/pdf-viewer"), {
     ssr: false,
@@ -22,12 +24,15 @@ function SpecificDocumentChatPage({params}: { params: Promise<{ documentId: stri
     const {anchorEndMessages} = useMessagesProcessAndScroll(documentId, isLoading, data);
     
     return (
-        <div className="flex">
-            <section className="w-1/2 border-r-1 border-r-main_border_color h-svh flex flex-col">
+        <div className="block md:flex">
+            <section className="w-1/2 border-r-1 border-r-main_border_color h-svh md:flex md:flex-col hidden">
                 <div className="mx-6 my-2 flex justify-between items-center">
-                    <strong className="text-lg text-nowrap truncate">
-                        {data?.name}
-                    </strong>
+                    <div className="flex items-center gap-2">
+                        {!useSidebarStore((state) => state.isOpen) && <ShowSidebarButton />}
+                        <strong className="text-lg text-nowrap max-w-[200px] md:max-w-[300px] truncate">
+                            {data?.name}
+                        </strong>
+                    </div>
                     <PDFInteracionButtons
                         documentId={documentId}
                         scrollToPage={scrollToPage}
@@ -41,21 +46,21 @@ function SpecificDocumentChatPage({params}: { params: Promise<{ documentId: stri
                     />
                 </div>
             </section>
-            <section className="ml-4 flex-1 h-svh flex flex-col">
+            <section className="ml-4 flex-1 flex flex-col h-[calc(100svh-3.5rem)] md:h-svh">
                 <div className="my-2 flex justify-between items-center">
                     <strong className="text-lg text-nowrap">Chat</strong>
                     <PdfOperations 
                         documentId={documentId}
                     />
                 </div>
-                <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-white">
+                <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-white min-h-0">
                     {isLoading ? <Spinner/> : <PDFMessagesRenderer
                         documentId={documentId}
                         scrollToPage={scrollToPage}
                     />}
-                    <div ref={anchorEndMessages}></div>
+                    <div className="hidden md:block" ref={anchorEndMessages}></div>
                 </div>
-                <div className="flex items-center gap-2 mb-2 mr-4">
+                <div className="flex items-center gap-2 mb-2 mr-4 mt-auto">
                     <PDFInputHandler
                         documentId={documentId}
                     />

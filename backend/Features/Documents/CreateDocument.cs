@@ -85,7 +85,6 @@ internal sealed class CreateDocumentCommandHandler(
         await dataLoader.LoadPdf(collectionName, fileBtyes, applicationConfig.RagConfig.DataLoadingBatchSize,
             applicationConfig.RagConfig.DataLoadingBetweenBatchDelayInMs, cancellationToken);
         
-        
         return document.Id;
     }
 }

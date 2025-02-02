@@ -13,11 +13,11 @@ function PDFMessagesRenderer({scrollToPage, documentId}: PDFMessagesRendererProp
     const {getMessages} = usePDFStore();
     
     return (
-        <>
+        <div className="w-full px-4">
             {getMessages(documentId).map((chat, index) => (
                 <div
                     key={index}
-                    className={`flex items-start gap-2 my-3 ${
+                    className={`flex items-start gap-2 my-3 w-full ${
                         chat.role === "USER" ? "justify-end" : "justify-start"
                     }`}
                 >
@@ -31,13 +31,13 @@ function PDFMessagesRenderer({scrollToPage, documentId}: PDFMessagesRendererProp
                         />
                     )}
                     <div
-                        className={`text-sm font-normal mr-3 space-y-1 ${
+                        className={`text-sm font-normal space-y-1 ${
                             chat.role === "USER"
-                                ? "text-right py-3 px-2 bg-sky-100 rounded-lg"
-                                : "text-left"
+                                ? "text-right py-3 px-4 bg-sky-100 rounded-lg max-w-[80%]"
+                                : "text-left max-w-[80%]"
                         }`}
                     >
-                        <div dangerouslySetInnerHTML={{__html: chat.content}} />
+                        <div className="break-words " dangerouslySetInnerHTML={{__html: chat.content}} />
                         {chat.role === "AI" && <p>Trích trong trang: </p>}
                         {chat.role === "AI" &&  
                             chat.citations?.length > 0 &&
@@ -46,16 +46,19 @@ function PDFMessagesRenderer({scrollToPage, documentId}: PDFMessagesRendererProp
                                     key={`citation_${index}`}
                                     className="flex items-start gap-2"
                                 >
-                                    <button onClick={() => scrollToPage(citation.pageNumber - 1)}>
+                                    <button 
+                                        className="flex-shrink-0" 
+                                        onClick={() => scrollToPage(citation.pageNumber - 1)}
+                                    >
                                         <SendHorizontal className="w-4 text-sky-500"/>
                                     </button>
-                                    <p>{citation.description}</p>
+                                    <p className="break-words">{citation.description}</p>
                                 </div>
                             ))}
                     </div>
                 </div>
             ))}
-        </>
+        </div>
     );
 }
 

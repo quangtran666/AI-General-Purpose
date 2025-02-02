@@ -6,12 +6,19 @@ import {
 } from "@radix-ui/react-tooltip";
 import { PanelRightOpen } from "lucide-react";
 import React from "react";
+import {useSidebarStore} from "@/stores/sidebarstore";
 
-function HideSiderBarButton() {
+interface HideSiderBarButtonProps { 
+  className?: string;
+}
+
+function HideSiderBarButton({className}: HideSiderBarButtonProps) {
+  const toggle = useSidebarStore((state) => state.toggle);
+  
   return (
     <TooltipProvider delayDuration={500}>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger onClick={toggle} className={className}>
           <PanelRightOpen />
         </TooltipTrigger>
         <TooltipContent sideOffset={10} >

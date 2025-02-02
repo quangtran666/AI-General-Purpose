@@ -1,11 +1,17 @@
+"use client"
+
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Card} from "@/components/ui/card";
 import {Bot} from "lucide-react";
+import {useSidebarStore} from "@/stores/sidebarstore";
+import ShowSidebarButton from "@/app/chat/documents/[documentId]/_components/show-sidebar-button";
+import React from "react";
 
 export default function Home() {
     return (
         <>
-            <header className="px-6 py-4 flex flex-col items-center justify-center">
+            {!useSidebarStore((state) => state.isOpen) && <ShowSidebarButton className={"invisible md:visible"}/>}
+            <header className="px-6 py-4 flex flex-col items-center justify-center mt-0 md:mt-4">
                 <h1 className="text-xl font-semibold">Chat with your PDF</h1>
                 <p className="text-sm text-muted-foreground">Ask questions and get answers from your document</p>
             </header>
