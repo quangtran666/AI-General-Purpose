@@ -1,8 +1,7 @@
 ﻿import axios from "axios"
 
 export const axiosInstance = axios.create({
-    // baseURL: "https://api.chatpdfsemantic.online/api",
-    baseURL: "https://localhost:5051/api",
+    baseURL: "https://api.chatpdfsemantic.online/api",
 })
 
 export const setAuth = (token: string) => {
